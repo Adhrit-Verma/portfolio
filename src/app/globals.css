@@ -1,26 +1,225 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   DEDSEC DOSSIER — tokens. Source of truth: design-system.md
+   ============================================================ */
+@theme {
+  --color-void: #0b0d10;
+  --color-panel: #12151a;
+  --color-panel-hi: #181c23;
+  --color-line: #262c35;
+  --color-line-hot: #3a424e;
+  --color-ink: #e8e6e1;
+  --color-dim: #9aa0a6;
+  --color-signal: #ff6b1a;
+  --color-signal-soft: #ff9552;
+  --color-scan: #4fe3d6;
+  --color-alert: #ff2e88;
+
+  --font-display: var(--font-chakra), "Arial Narrow", system-ui, sans-serif;
+  --font-mono: var(--font-jbmono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+
+  --ease-hud: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snap: cubic-bezier(0.6, 0, 0.2, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+    font-synthesis-weight: none;
+  }
+
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-void);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-scan);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* --- texture: circuit grid + vignette. decorative, never over text --- */
+  .circuit-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--color-line) 55%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-line) 55%, transparent) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 20%, transparent 78%);
+  }
+
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(232, 230, 225, 0.055) 0px,
+      rgba(232, 230, 225, 0.055) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  /* --- chrome: the mono label that sits above every block --- */
+  .chrome {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* --- stencil: WD2's street-art layer. sparse. --- */
+  .stencil {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--color-signal) 45%, transparent);
+  }
+
+  /* --- the glitch cut. ~180ms. transition only. --- */
+  .glitch-cut {
+    animation: glitch-cut 0.18s steps(3, end) var(--ease-snap) both;
+  }
+
+  .glitch-text {
+    position: relative;
+  }
+  .glitch-text[data-glitching="true"]::before,
+  .glitch-text[data-glitching="true"]::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    clip-path: inset(0 0 55% 0);
+  }
+  .glitch-text[data-glitching="true"]::before {
+    color: var(--color-alert);
+    transform: translate3d(-2px, -1px, 0);
+  }
+  .glitch-text[data-glitching="true"]::after {
+    color: var(--color-scan);
+    transform: translate3d(2px, 1px, 0);
+    clip-path: inset(58% 0 0 0);
+  }
+
+  /* --- the cyan sweep that crosses a scan box --- */
+  .sweep {
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, var(--color-scan) 70%, transparent),
+      transparent
+    );
+  }
+
+  .caret::after {
+    content: "";
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 0.15em;
+    translate: 0 0.12em;
+    background: var(--color-signal);
+    animation: blink 1s steps(2, end) infinite;
+  }
+
+  .tabnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@keyframes glitch-cut {
+  0% {
+    transform: translate3d(-6px, 0, 0) skewX(4deg);
+    filter: saturate(2.5);
+  }
+  40% {
+    transform: translate3d(5px, 0, 0) skewX(-3deg);
+  }
+  100% {
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@layer components {
+  /* `unlock` hover: the card re-sweeps under the pointer. CSS-only so it never
+     races the GSAP scroll timeline that owns the same element. */
+  .hover-sweep::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 5rem;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, var(--color-scan) 45%, transparent),
+      transparent
+    );
+  }
+  .hover-sweep:hover::after {
+    animation: sweep-down 0.75s var(--ease-hud) 1;
+  }
+}
+
+@keyframes sweep-down {
+  0% {
+    opacity: 0.9;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(340%);
+  }
+}
+
+/* Calmer, not broken. See design-system.md §5. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .scanlines {
+    display: none;
+  }
+  .caret::after {
+    animation: none;
+    opacity: 1;
+  }
 }
