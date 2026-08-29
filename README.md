@@ -12,12 +12,40 @@ npm run dev      # http://localhost:3000
 ```
 
 ```bash
-npm run build && npm start   # production
-npx eslint src               # lint (clean)
-npx tsc --noEmit             # typecheck (clean)
+npm run build       # static export -> out/
+npx serve out       # preview the export exactly as Netlify will serve it
+npx eslint src      # lint (clean)
+npx tsc --noEmit    # typecheck (clean)
 ```
 
-Node 20+. No env vars, no external services — the whole site is static.
+Node 20+. No env vars, no external services.
+
+`next.config.ts` sets `output: "export"`, so `npm run build` writes plain files to `out/`
+and there is no server to run — `npm start` does not apply.
+
+## Deploy to Netlify
+
+[netlify.toml](netlify.toml) has everything: build command, publish directory (`out`), and
+Node version. Nothing to configure in the Netlify UI.
+
+**From the dashboard:** *Add new site → Import an existing project*, pick this repo, deploy.
+Netlify reads `netlify.toml` and the detected settings will already be correct.
+
+**From the CLI:**
+
+```bash
+npm i -g netlify-cli
+netlify init      # link the repo, once
+netlify deploy --prod
+```
+
+Because the site is a static export, Netlify serves it as plain files — no Next.js runtime,
+no serverless functions, no cold starts. `NETLIFY_NEXT_PLUGIN_SKIP` in `netlify.toml` turns
+off the auto-installed Next runtime, which has nothing to do here.
+
+If you ever add a route handler, server action, or `next/image`, drop `output: "export"` from
+`next.config.ts`, remove `NETLIFY_NEXT_PLUGIN_SKIP`, and change `publish` to `.next` — Netlify's
+Next.js runtime takes over from there.
 
 ## Where things live
 

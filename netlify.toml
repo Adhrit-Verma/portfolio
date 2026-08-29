@@ -1,0 +1,13 @@
+# The site is a pure static export (see next.config.ts), so Netlify only has to
+# serve files — no Next.js runtime, no serverless functions, nothing to keep in
+# version-sync with Next itself.
+
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Skip the auto-installed Next.js runtime. It has nothing to do for a static
+  # export, and skipping it removes the one moving part in this deploy.
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
