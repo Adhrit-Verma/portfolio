@@ -59,6 +59,8 @@ Next.js runtime takes over from there.
 | [src/components/hud.tsx](src/components/hud.tsx) | HUD primitives: `ScanPanel`, `Corners`, `ChapterHeader`, `Pill`, `Stencil`. |
 | [src/components/HeroField.tsx](src/components/HeroField.tsx) | 3D layer 1 — the hero node cloud. |
 | [src/components/AgentGraph.tsx](src/components/AgentGraph.tsx) | 3D layer 2 — the LangGraph pipeline topology, execution front driven by scroll. |
+| [src/components/ShaderTitle.tsx](src/components/ShaderTitle.tsx) | 3D layer 3 — the headline corruption shader (GLSL). |
+| [src/components/CtosCursor.tsx](src/components/CtosCursor.tsx) | The targeting reticle. Raw rAF, no React state per frame. |
 | [src/components/](src/components/) | One file per chapter. `chapters.tsx` holds the four simpler ones. |
 
 ## The chapters
@@ -109,8 +111,10 @@ cross-checked against the live public repos at [github.com/Adhrit-Verma](https:/
 > This site uses 72. Worth updating the PDFs.
 
 **Featured** (full dossier cards, each linking to its repo): Contrast, ClauseGuard, TableFox.
-**Recovered** (compact cards, also linked): Two-Agent Self-Extending AI System, Gradient Dense Code,
-LocalDocQA, AuDiX.
+**Recovered** (compact cards, also linked): Two-Agent Self-Extending AI System, Gradient Dense Code.
+
+The recovered list is deliberately short. LocalDocQA and AuDiX were cut — a long tail of minor
+repos dilutes the three that carry the positioning. Add one back only if it earns its place.
 
 Aviatrack and the HRM Web Application live in the Case Log rather than Files — they are client work,
 not public repos.

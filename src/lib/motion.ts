@@ -39,6 +39,11 @@ export function useReducedMotion() {
   return useMedia("(prefers-reduced-motion: reduce)", false);
 }
 
+/** Touch/pen only — distinct from the 3D power gate below. */
+export function useCoarsePointer() {
+  return useMedia("(pointer: coarse)", true);
+}
+
 /** Coarse pointer, narrow screen, or few cores => skip the 3D layer entirely. */
 export function useLowPower() {
   const coarse = useMedia("(pointer: coarse)", true);

@@ -130,7 +130,7 @@
     background: linear-gradient(
       to bottom,
       transparent,
-      color-mix(in srgb, var(--color-scan) 70%, transparent),
+      color-mix(in srgb, var(--color-scan) 42%, transparent),
       transparent
     );
   }
@@ -202,6 +202,97 @@
   100% {
     opacity: 0;
     transform: translateY(340%);
+  }
+}
+
+@layer components {
+  /* --- ctOS targeting reticle (CtosCursor.tsx) --- */
+  .ctos-cursor,
+  .ctos-cursor * {
+    cursor: none !important;
+  }
+
+  .ctos-dot {
+    background: var(--color-signal);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--color-signal) 80%, transparent);
+  }
+
+  .ctos-reticle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background: color-mix(in srgb, var(--color-scan) 7%, transparent);
+    transition: opacity 0.25s var(--ease-hud);
+  }
+
+  .ctos-bracket {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-color: var(--color-ink);
+    transition: border-color 0.25s var(--ease-hud);
+  }
+  .ctos-bracket-tl {
+    left: 0;
+    top: 0;
+    border-left: 1.5px solid;
+    border-top: 1.5px solid;
+  }
+  .ctos-bracket-tr {
+    right: 0;
+    top: 0;
+    border-right: 1.5px solid;
+    border-top: 1.5px solid;
+  }
+  .ctos-bracket-bl {
+    left: 0;
+    bottom: 0;
+    border-left: 1.5px solid;
+    border-bottom: 1.5px solid;
+  }
+  .ctos-bracket-br {
+    right: 0;
+    bottom: 0;
+    border-right: 1.5px solid;
+    border-bottom: 1.5px solid;
+  }
+
+  .ctos-readout {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 9px;
+    padding: 4px 7px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-scan);
+    /* The reticle can lock anywhere, so the readout carries its own ground
+       rather than landing unreadably on whatever is behind it. */
+    background: color-mix(in srgb, var(--color-void) 92%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-scan) 32%, transparent);
+    opacity: 0;
+    transform: translateY(-5px);
+    transition:
+      opacity 0.2s var(--ease-hud),
+      transform 0.2s var(--ease-hud);
+  }
+
+  [data-locked="true"] .ctos-bracket {
+    border-color: var(--color-scan);
+    width: 13px;
+    height: 13px;
+  }
+  [data-locked="true"] .ctos-reticle::before {
+    opacity: 1;
+  }
+  [data-locked="true"] .ctos-readout {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

@@ -205,8 +205,8 @@ export const files = [
 ];
 
 /**
- * Recovered files — smaller builds, every one a real public repo.
- * Compact by design; the three above carry the weight.
+ * Recovered files — the two smaller builds worth a reader's time.
+ * Deliberately short: a long tail of minor repos dilutes the three above.
  */
 export const recovered = [
   {
@@ -222,20 +222,6 @@ export const recovered = [
     hook: "QR geometry carrying a second, separate payload in calibrated RGB — a normal scanner still reads the carrier; only the GDC decoder sees the color layer.",
     stack: ["Python", "zlib", "CRC32"],
     url: repo("GDC"),
-  },
-  {
-    code: "LDQA",
-    name: "LocalDocQA",
-    hook: "Offline document Q&A on CPU — PyMuPDF extraction, chunked context, locally cached transformers, no internet and no data leaving the machine.",
-    stack: ["Python", "Transformers", "PyMuPDF"],
-    url: repo("LocalDocQA"),
-  },
-  {
-    code: "ADIX",
-    name: "AuDiX",
-    hook: "Audio Distribution Exchange — low-latency audio broadcast across a local network, split into separate user and admin portals with role-based access.",
-    stack: ["Node.js", "PostgreSQL"],
-    url: repo("AuDix_User"),
   },
 ];
 

@@ -8,6 +8,8 @@ import { Corners, Pill } from "./hud";
 
 const HeroField = dynamic(() => import("./HeroField"), { ssr: false });
 
+const ShaderTitle = dynamic(() => import("./ShaderTitle"), { ssr: false });
+
 const ROLE_LINE = `${identity.role} // ${identity.tagline}`;
 
 /** Fires once the boot overlay is out of the way (or immediately, if it never ran). */
@@ -33,6 +35,8 @@ export default function Hero() {
   const lowPower = useLowPower();
   const booted = useBooted();
   const root = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const [shaderPainted, setShaderPainted] = useState(false);
 
   useEffect(() => {
     const el = root.current;
@@ -112,16 +116,28 @@ export default function Hero() {
             <Pill tone="scan">SCAN COMPLETE</Pill>
           </div>
 
-          <h1
-            id="hero-title"
-            data-glitch
-            data-text={identity.name}
-            className="glitch-text text-[clamp(3rem,12vw,9rem)] font-bold uppercase leading-[0.86] tracking-tighter"
-          >
-            <span data-stagger className="block">
-              {identity.name}
-            </span>
-          </h1>
+          {/* The real h1 stays put and only fades once the shader has painted —
+              no JS, no WebGL, or a lost context and you keep crisp, selectable type. */}
+          <div className="relative">
+            <h1
+              ref={titleRef}
+              id="hero-title"
+              data-glitch
+              data-text={identity.name}
+              className={`glitch-text text-[clamp(3rem,12vw,9rem)] font-bold uppercase leading-[0.86] tracking-tighter transition-opacity duration-500 ${
+                shaderPainted ? "opacity-0" : ""
+              }`}
+            >
+              <span data-stagger className="block">
+                {identity.name}
+              </span>
+            </h1>
+            {!lowPower && !reduced && (
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+                <ShaderTitle sourceRef={titleRef} onReady={() => setShaderPainted(true)} />
+              </div>
+            )}
+          </div>
 
           <p
             data-stagger

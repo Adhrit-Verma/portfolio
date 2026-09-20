@@ -58,6 +58,8 @@ Five named patterns. Everything on the site is one of these — no one-off anima
 | `glitchCut` | Chapter boundary. ~180ms: horizontal slice offset + magenta/cyan channel split, then clean. A cut, not a texture. | CSS keyframes, GSAP-triggered |
 | `typeOn` | Terminal type-on for one key line per chapter. Caret blinks, then resolves. | GSAP |
 | `unlock` | Dossier card reveal: bracket snap, status flips `LOCKED` → `DECRYPTED`, body staggers in. Hover lifts + re-sweeps. | Framer Motion (hover) + GSAP (scroll) |
+| `lock-on` | **The signature interaction.** The cursor is a ctOS targeting reticle: idle it is a crosshair, near anything interactive it snaps to that element's box, tints cyan, and names the action in a readout chip. | Raw rAF, `CtosCursor.tsx` |
+| `corrupt` | The headline is drawn to a canvas from the real `h1`'s computed font, uploaded as a texture, then torn per-channel in GLSL — slice displacement, chromatic aberration, scanlines, dropout. Intensity tracks scroll velocity plus a decaying spike on first resolve. | Custom shader, `ShaderTitle.tsx` |
 
 Easing: `--ease-hud` `cubic-bezier(.16,1,.3,1)` for reveals (fast out, long settle — HUD panels arriving).
 `--ease-snap` `cubic-bezier(.6,0,.2,1)` for state flips and cuts.
@@ -65,7 +67,8 @@ Easing: `--ease-hud` `cubic-bezier(.16,1,.3,1)` for reveals (fast out, long sett
 **Library job split — they never share a timeline:**
 - **GSAP + ScrollTrigger** owns everything scroll-driven: pinning, scrubbed timelines, reveals, counters, the case-log spine.
 - **Framer Motion** owns pointer-driven component state only: hover, tap, layout. No scroll listeners.
-- **React Three Fiber** owns one thing: the hero particle network. Lazy-loaded, capped, disabled on coarse pointers and reduced-motion.
+- **React Three Fiber** owns three scenes, all lazy and all gated: the hero particle network, the Files-chapter pipeline topology, and the headline corruption shader.
+- **Raw rAF** owns exactly one thing — the targeting reticle. It never touches React state per frame.
 - **Lenis** smooths the scroll and drives ScrollTrigger's ticker. Off under reduced-motion.
 
 ## 4. Texture & iconography
@@ -80,7 +83,9 @@ Easing: `--ease-hud` `cubic-bezier(.16,1,.3,1)` for reveals (fast out, long sett
 
 The site owner ships an accessibility auditor. Hold the bar.
 
-- **`prefers-reduced-motion`**: a genuinely calmer site, not a broken one. Boot sequence resolves instantly to the hero, `scan` renders in its finished state (brackets drawn, counters at final value), `glitchCut` becomes a plain fade, Lenis and the 3D layer never mount. Nothing is hidden behind an animation that no longer runs.
+- **`prefers-reduced-motion`**: a genuinely calmer site, not a broken one. Boot sequence resolves instantly to the hero, `scan` renders in its finished state (brackets drawn, counters at final value), `glitchCut` becomes a plain fade, and Lenis, all three 3D scenes, and the reticle never mount. Nothing is hidden behind an animation that no longer runs.
+- **The reticle never replaces information.** It is `aria-hidden`, intercepts no pointer events, and is not mounted for coarse pointers — touch users keep native behaviour, keyboard users keep the `:focus-visible` ring.
+- **The shader never owns the text.** The real `<h1>` stays in the DOM and only fades once WebGL has actually painted a frame. No JS, no WebGL, or a lost context and you keep crisp, selectable, screen-reader-correct type.
 - Contrast per the table above; never color-alone for meaning (status pills carry text).
 - Glitch never obscures readable content for more than ~180ms, and never runs on a loop over body copy.
 - Every interactive element reachable by keyboard with a visible `scan`-cyan focus ring, `:focus-visible` only.

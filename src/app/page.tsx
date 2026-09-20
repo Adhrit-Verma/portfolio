@@ -1,5 +1,6 @@
 import Boot from "@/components/Boot";
 import CaseLog from "@/components/CaseLog";
+import CtosCursor from "@/components/CtosCursor";
 import HackedFiles from "@/components/HackedFiles";
 import Hero from "@/components/Hero";
 import Nav from "@/components/Nav";
@@ -15,6 +16,7 @@ export default function Page() {
   return (
     <>
       <SmoothScroll />
+      <CtosCursor />
       <Boot />
       <Nav />
       <main>
