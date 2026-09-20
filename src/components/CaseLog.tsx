@@ -38,7 +38,7 @@ export default function CaseLog() {
 
       <ChapterHeader
         id="caselog-title"
-        index="03"
+        index="04"
         label="Case Log"
         title="Employment Record"
         meta="STATUS: ACTIVE"

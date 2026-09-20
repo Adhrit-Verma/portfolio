@@ -1,7 +1,8 @@
 # DEDSEC DOSSIER — Adhrit Verma
 
 A scroll-driven portfolio built as a **ctOS-style profile hack**: you don't browse sections,
-you decrypt a dossier. Watch_Dogs 2's San Francisco hacktivist language — DedSec orange on warm
+you decrypt a dossier. Positioned as **AI Software Engineer** — LangGraph multi-agent pipelines,
+RAG retrieval, and MCP. Watch_Dogs 2's San Francisco hacktivist language — DedSec orange on warm
 off-black, HUD scan-boxes, glitch as a *cut* — not Watch_Dogs 1's grim green-on-black terminal.
 
 ## Run it
@@ -56,12 +57,16 @@ Next.js runtime takes over from there.
 | [src/lib/motion.ts](src/lib/motion.ts) | The motion vocabulary — `scan`, `typeOn`, `countUp`, `glitchCut` — plus the media-query hooks. |
 | [src/app/globals.css](src/app/globals.css) | Design tokens as a Tailwind v4 `@theme` block, texture classes, keyframes, reduced-motion rules. |
 | [src/components/hud.tsx](src/components/hud.tsx) | HUD primitives: `ScanPanel`, `Corners`, `ChapterHeader`, `Pill`, `Stencil`. |
+| [src/components/HeroField.tsx](src/components/HeroField.tsx) | 3D layer 1 — the hero node cloud. |
+| [src/components/AgentGraph.tsx](src/components/AgentGraph.tsx) | 3D layer 2 — the LangGraph pipeline topology, execution front driven by scroll. |
 | [src/components/](src/components/) | One file per chapter. `chapters.tsx` holds the four simpler ones. |
 
 ## The chapters
 
 `Boot` (access sequence) → `Hero` (profile card) → `Profile` → `AccessPanel` (skills) →
-`CaseLog` (experience) → `HackedFiles` (projects) → `Credentials` → `Connect`.
+`HackedFiles` (projects) → `CaseLog` (experience) → `Credentials` → `Connect`.
+
+The AI project work leads; the employment record follows it.
 
 Composed in [src/app/page.tsx](src/app/page.tsx).
 
@@ -71,9 +76,15 @@ They never share a timeline — that's deliberate.
 
 - **GSAP + ScrollTrigger** — everything scroll-driven: reveals, counters, the case-log spine, the boot sequence.
 - **Framer Motion** (`motion` pkg) — pointer state only: card lift, nav rail, button press.
-- **React Three Fiber + drei** — one thing: the hero node network. Lazy-loaded via `next/dynamic`,
-  420 nodes, neighbours resolved once at init, and never mounted on coarse pointers, narrow screens,
-  ≤4 cores, or under reduced motion.
+- **React Three Fiber + drei** — two scenes, both lazy-loaded via `next/dynamic` and never mounted
+  on coarse pointers, narrow screens, ≤4 cores, or under reduced motion:
+  - `HeroField` — a 420-node cloud, neighbours resolved once at init.
+  - `AgentGraph` — the pipeline topology in the Files chapter. One `InstancedMesh`, per-instance
+    colour, and an execution front that sweeps the layers as you scroll. ScrollTrigger writes a
+    number into a ref and `useFrame` reads it, so the hot path triggers no React renders.
+    It oscillates rather than spins — a full rotation turns the pipeline edge-on and the
+    left-to-right shape stops reading. Without the 3D layer the panel collapses to a compact
+    text strip instead of leaving an empty box.
 - **Lenis** — smooths scroll and drives GSAP's ticker. Not mounted under reduced motion.
 
 ## Accessibility
@@ -90,16 +101,19 @@ The site owner ships an accessibility auditor, so the bar is that bar.
 
 ## Content notes
 
-Real links are wired in (`LINKEDIN` / `GITHUB` at the top of `src/lib/resume.ts`).
+Copy comes from two JD-targeted resumes (AI Software Engineer, Forward Deployed Engineer),
+cross-checked against the live public repos at [github.com/Adhrit-Verma](https://github.com/Adhrit-Verma).
+**Where a repo and a resume disagree, the repo wins** — it is the artifact a reader can go and verify.
 
-The **Hacked Files** chapter has two tiers, and this is intentional:
+> Known divergence: Contrast's suite is **72 tests** in the repo; both resume PDFs still say 68.
+> This site uses 72. Worth updating the PDFs.
 
-- **Three full dossiers** — Aviatrack, HRM Web Application, Contrast — every line sourced from the resume.
-- **Five partial fragments** in the `archive` array (Personal AI Assistant, Postgres Schema
-  Intelligence, Dense Visual Encoding, Intranet Audio Broadcast, RAG Document Q&A). These carry a name
-  and a one-line hook only, and the UI labels them `PARTIAL RECOVERY` — because no verified detail for
-  them exists in the source resume. Nothing was invented to fill them out.
+**Featured** (full dossier cards, each linking to its repo): Contrast, ClauseGuard, TableFox.
+**Recovered** (compact cards, also linked): Two-Agent Self-Extending AI System, Gradient Dense Code,
+LocalDocQA, AuDiX.
 
-  **To promote one to a full card:** move its entry from `archive` into `files` in
-  [src/lib/resume.ts](src/lib/resume.ts), matching the existing shape (`id`, `code`, `name`, `kind`,
-  `hook`, `stack`, `body`, `metrics`). No component changes needed.
+Aviatrack and the HRM Web Application live in the Case Log rather than Files — they are client work,
+not public repos.
+
+To add or move a project, edit the `files` (featured) or `recovered` (compact) arrays in
+[src/lib/resume.ts](src/lib/resume.ts). No component changes needed.

@@ -13,7 +13,7 @@ const LINES = [
   "> ctos.link --target ADHRIT_VERMA --region blr",
   "> bypassing profile encryption ............ ok",
   "> employment record ........ NEWRU TECHNOLOGIES",
-  "> decrypting project archive ....... 3 dossiers",
+  "> indexing repos ...... 3 featured, 4 recovered",
 ];
 
 /**

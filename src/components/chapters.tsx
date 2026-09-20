@@ -21,7 +21,7 @@ export function Profile() {
         index="01"
         label="Profile"
         title="Subject Summary"
-        meta="SOURCE: EMPLOYMENT RECORD"
+        meta="SOURCE: RESUME + PUBLIC REPOS"
       />
 
       <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-16">
@@ -102,7 +102,7 @@ export function Credentials() {
         index="05"
         label="Credentials"
         title="Verified Records"
-        meta="2 RECORDS ON FILE"
+        meta="3 RECORDS ON FILE"
       />
 
       <div className="space-y-4">
@@ -149,8 +149,9 @@ export function Connect() {
       <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
         <div>
           <p className="max-w-md text-lg leading-relaxed text-ink">
-            Backend problems, RAG systems, or a platform that has quietly become
-            three platforms — send it over. Response time beats most CI pipelines.
+            Agent pipelines, retrieval that has to actually retrieve, or a platform
+            that has quietly become three platforms — send it over. Response time
+            beats most CI pipelines.
           </p>
           <motion.a
             href={`mailto:${identity.email}`}

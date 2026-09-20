@@ -23,13 +23,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Adhrit Verma — Backend / Full-Stack Software Engineer",
+  title: "Adhrit Verma — AI Software Engineer",
   description:
-    "ctOS-style dossier for Adhrit Verma: backend-focused software engineer building airline operations, HR platforms, and RAG systems with Node.js, PostgreSQL and Redis.",
+    "ctOS-style dossier for Adhrit Verma: AI software engineer building LangGraph multi-agent pipelines, RAG retrieval, and MCP servers — Contrast, ClauseGuard and TableFox.",
   openGraph: {
-    title: "Adhrit Verma — Backend / Full-Stack Software Engineer",
+    title: "Adhrit Verma — AI Software Engineer",
     description:
-      "Node.js · PostgreSQL · Redis · RAG. Three years of production systems, on file.",
+      "Python · LLMs · RAG · MCP · React. Three production AI systems, on file.",
     type: "profile",
   },
 };

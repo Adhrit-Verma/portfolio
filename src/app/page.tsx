@@ -7,7 +7,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { AccessPanel, Connect, Credentials, Profile } from "@/components/chapters";
 
 /**
- * One scroll narrative: access → profile → toolkit → record → files → creds → channel.
+ * One scroll narrative: access → profile → toolkit → files → record → creds → channel.
  * Everything below renders at full opacity without JS; the animations only take
  * it away and hand it back.
  */
@@ -21,8 +21,8 @@ export default function Page() {
         <Hero />
         <Profile />
         <AccessPanel />
-        <CaseLog />
         <HackedFiles />
+        <CaseLog />
         <Credentials />
         <Connect />
       </main>

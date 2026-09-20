@@ -1,100 +1,105 @@
 /**
  * Single source of truth for every word on this site.
- * Copy is lifted verbatim from Adhrit_Verma_Optimized_2.pdf.
+ *
+ * Copy is drawn from two JD-targeted resumes (AI Software Engineer / Forward
+ * Deployed Engineer) and cross-checked against the live public repos at
+ * github.com/Adhrit-Verma. Where a repo and a resume disagree, the repo wins —
+ * it is the artifact a reader can actually go and verify.
+ *
+ * Known divergence: Contrast's suite is 72 tests in the repo; both resume PDFs
+ * still say 68. This file uses 72.
  */
 export const LINKEDIN = "https://www.linkedin.com/in/adhrit-verma/";
 export const GITHUB = "https://github.com/Adhrit-Verma";
+const repo = (name: string) => `${GITHUB}/${name}`;
 
 export const identity = {
   name: "Adhrit Verma",
   handle: "ADHRIT_VERMA",
-  role: "Backend / Full-Stack Software Engineer",
-  stack: ["Node.js", "PostgreSQL", "Redis"],
+  role: "AI Software Engineer",
+  tagline: "Python · LLMs · RAG · MCP · React",
+  stack: ["LangGraph", "RAG", "MCP", "Python"],
   location: "Bengaluru, India",
   email: "adhrit007@gmail.com",
   phone: "+91 90971 48424",
-  status: "EMPLOYED — NEWRU TECHNOLOGIES",
+  employer: "Newru Technologies",
   since: "SEP 2023",
 };
 
-/** ctOS-profiler stat readout. Every number traces back to a resume line. */
+/** ctOS-profiler readout. Every number traces to a resume line or a live repo. */
 export const stats = [
   { label: "Years in production", value: 3, prefix: "", suffix: "", note: "Since Sep 2023" },
-  { label: "Aviatrack core workflows", value: 90, prefix: "", suffix: "%+", note: "Delivered end-to-end" },
-  { label: "Flight-planning effort cut", value: 50, prefix: "40–", suffix: "%", note: "Multi-leg automation" },
-  { label: "Compliance review errors", value: 30, prefix: "−", suffix: "%+", note: "5 DGCA-style checks" },
+  { label: "Production AI systems", value: 3, prefix: "", suffix: "", note: "Contrast · ClauseGuard · TableFox" },
+  { label: "Tests across those pipelines", value: 162, prefix: "", suffix: "", note: "72 + 23 + 67, all passing" },
+  { label: "Agent token usage cut", value: 29, prefix: "−", suffix: "%", note: "TableFox vs. full-schema baseline" },
 ];
 
 export const summary =
-  "Backend-focused Software Engineer with 3 years of experience designing and owning production systems using Node.js, Express.js, PostgreSQL, MongoDB, and Redis. Built end-to-end workflows for airline operations and HR platforms, cutting recurring flight-planning effort by 40–50% and lowering compliance-review errors by more than 30%. Proficient in Python, FastAPI, React, AWS, Docker, and retrieval-augmented generation (RAG). Known for production problem-solving, system ownership, and shipping business-critical features from requirements through deployment.";
+  "AI Software Engineer with 3 years of production experience across Python, JavaScript/TypeScript (React), and applied Generative AI. Comfortable owning AI-integrated systems end to end: architecture, agent orchestration, retrieval design, and production delivery on cloud infrastructure. Architected Contrast, a LangGraph-orchestrated multi-agent pipeline with a RAG grounding layer; built ClauseGuard, a multi-agent contract-review system with hybrid keyword + semantic retrieval; and built TableFox, exposing PostgreSQL to AI agents via an MCP (Model Context Protocol) server.";
 
 export const profileTraits = [
-  { k: "Discipline", v: "Backend-first" },
-  { k: "Domain", v: "Airline ops · HR platforms" },
-  { k: "Current focus", v: "RAG · agentic AI" },
+  { k: "Discipline", v: "AI systems, backend-first" },
+  { k: "Specialism", v: "Agent orchestration · retrieval design" },
+  { k: "Field posture", v: "Sole technical contact, 2+ yrs" },
+  { k: "Domain", v: "Airline ops · HR · compliance" },
   { k: "Mode of operation", v: "Owns systems end-to-end" },
 ];
 
 export const skillModules = [
   {
+    id: "GENAI",
+    title: "AI / ML / GenAI",
+    items: [
+      "Large Language Models",
+      "LangChain",
+      "LangGraph",
+      "RAG",
+      "Hybrid retrieval",
+      "MCP",
+      "AI agents",
+      "Multi-agent orchestration",
+      "Prompt engineering",
+    ],
+  },
+  {
     id: "LANG",
     title: "Languages",
-    items: ["JavaScript", "Python", "SQL"],
+    items: ["Python", "JavaScript", "TypeScript", "SQL"],
   },
   {
     id: "BACK",
     title: "Backend",
-    items: [
-      "Node.js",
-      "Express.js",
-      "FastAPI",
-      "REST APIs",
-      "Authentication & Authorization",
-      "RBAC",
-    ],
+    items: ["FastAPI", "Node.js", "Express.js", "REST APIs", "RBAC"],
   },
   {
     id: "DATA",
-    title: "Data Stores",
+    title: "Data & Vector",
     items: [
       "PostgreSQL",
       "MongoDB",
       "Redis",
+      "SQLite",
+      "Local embeddings (Ollama)",
       "Schema design",
-      "Indexing",
       "Query optimization",
-      "Data integrity",
     ],
   },
   {
     id: "FRNT",
     title: "Frontend",
-    items: ["React.js", "HTML5", "CSS3"],
+    items: ["React.js", "Next.js", "HTML5", "CSS"],
   },
   {
     id: "INFRA",
     title: "Cloud & Delivery",
-    items: ["Docker", "GitLab CI/CD", "AWS Lambda", "S3", "DynamoDB", "Linux VPS", "Git"],
-  },
-  {
-    id: "GENAI",
-    title: "GenAI & Data",
-    items: [
-      "RAG",
-      "LangChain",
-      "LangGraph",
-      "Prompt engineering",
-      "AI agents",
-      "Pandas",
-      "NumPy",
-    ],
+    items: ["AWS Lambda", "S3", "DynamoDB", "Docker", "GitLab CI/CD", "Git"],
   },
 ];
 
 export const experience = [
   {
     org: "Newru Technologies Pvt. Ltd.",
-    role: "Software Engineer",
+    role: "Software Engineer (Sole Engineer)",
     period: "Sep 2023 – Present",
     location: "Bengaluru, India",
     stack: [
@@ -113,11 +118,11 @@ export const experience = [
         name: "Aviatrack",
         subtitle: "Airline Crew & Operations Management Platform",
         log: [
+          "Retained directly by the end client as sole technical point of contact after the engagement structure changed — owning requirements, architecture, delivery, and production support independently for 2+ years.",
+          "Embedded directly with airline operations stakeholders to design deployments, troubleshoot issues, and translate undocumented workflows into a production platform delivering more than 90% of core operational needs.",
           "Delivered more than 90% of Aviatrack's core operational workflows — flight planning, crew assignment, PIC/SIC allocation, duty-time calculations, document expiry tracking, and reporting.",
-          "Cut recurring flight-planning effort by 40–50% by automating multi-leg crew scheduling, validation rules, and exception handling.",
-          "Enforced five DGCA-style compliance checks (flight duty period, flight time, weekly rest, crew qualifications, document validity), lowering manual review errors by more than 30%.",
-          "Designed Node.js and Express.js services with PostgreSQL data models and Redis-backed processing to improve workflow reliability and validation.",
-          "Built Python and Node.js automation utilities for data processing, removing repetitive steps across engineering and business teams.",
+          "Built REST APIs and Python/Node.js data-processing pipelines to automate multi-leg crew scheduling, validation rules, and exception handling, cutting recurring flight-planning effort by 40–50%.",
+          "Encoded five DGCA regulatory compliance checks into enforced system rules (flight duty period, flight time, weekly rest, crew qualifications, document validity), lowering manual review errors by more than 30%.",
         ],
       },
       {
@@ -125,89 +130,124 @@ export const experience = [
         name: "HRM Web Application",
         subtitle: "HR & Employee Management System",
         log: [
-          "Directed backend and full-stack delivery of two role-specific portals (HR, Employee) covering records, attendance, leave, compensation, payroll documents, onboarding, training, and device tracking.",
+          "Directed backend and full-stack delivery of two role-specific portals (HR, Employee) built with React.js and Node.js, covering records, attendance, leave, compensation, payroll documents, onboarding, training, and device tracking.",
           "Reengineered PostgreSQL schemas, indexes, and queries to accelerate response times and eliminate recurring data-integrity defects.",
           "Cut manual follow-up across 5 recurring HR workflows by automating approvals, email notifications, document verification, attendance, and leave tracking.",
           "Strengthened security via RBAC, audit logging, secure session handling, and 2FA-ready flows — improving access control and traceability.",
-          "Standardized deployments through GitLab CI/CD pipelines, shortening release prep and accelerating onboarding for new engineers.",
         ],
       },
     ],
   },
 ];
 
-/** Fully-recovered dossiers — every line sourced from the resume. */
+/** Featured dossiers — the three production AI systems, each with a live repo. */
 export const files = [
   {
     id: "F-01",
-    code: "AVTK",
-    name: "Aviatrack",
-    kind: "Airline Crew & Operations Management Platform",
-    hook: "Runs the day an airline actually has — planning, crew, duty time, compliance.",
-    stack: ["Node.js", "Express.js", "PostgreSQL", "Redis", "Python"],
+    code: "CNTR",
+    name: "Contrast",
+    kind: "AI-Assisted Accessibility Auditing & Remediation Platform",
+    hook: "Fixes the accessibility failures automated scanners can only shrug at — then re-tests every fix in a fresh browser before daring to call it fixed.",
+    stack: ["Node.js", "LangGraph", "Puppeteer", "Google Gemini API", "axe-core", "SQLite"],
+    url: repo("Contrast"),
     body: [
-      "Delivered more than 90% of core operational workflows: flight planning, crew assignment, PIC/SIC allocation, duty-time calculations, document expiry tracking, and reporting.",
-      "Automated multi-leg crew scheduling, validation rules, and exception handling — cutting recurring flight-planning effort by 40–50%.",
-      "Enforced five DGCA-style compliance checks (flight duty period, flight time, weekly rest, crew qualifications, document validity), lowering manual review errors by more than 30%.",
+      "Architected a 7-phase, LangGraph-orchestrated multi-agent pipeline composing Puppeteer crawling, axe-core/Lighthouse tooling, and Gemini-based judgment calls — validated end to end by a 72-test suite with zero axe violations in its own UI.",
+      "Grounded AI-generated remediations in a RAG pipeline over WCAG 2.2 criteria and house patterns, re-verifying every fix via fresh-browser re-scans — a hand-built evaluation and regression loop for AI output quality.",
+      "Extended audits to authenticated, login-gated apps with zero credentials stored, by detecting sign-in walls mid-crawl and persisting only an encrypted session (AES-256-GCM).",
+      "Separates what it measured from what a model assessed, and states plainly that automated testing catches only 30–40% of WCAG issues — a capacity multiplier for human auditors, not a conformance claim.",
     ],
     metrics: [
-      { k: "Core workflows", v: "90%+" },
-      { k: "Planning effort", v: "−40–50%" },
-      { k: "Compliance checks", v: "5" },
+      { k: "Pipeline phases", v: "7" },
+      { k: "Test suite", v: "72" },
+      { k: "Axe violations", v: "0" },
     ],
   },
   {
     id: "F-02",
-    code: "HRMW",
-    name: "HRM Web Application",
-    kind: "HR & Employee Management System",
-    hook: "Two portals, one schema, and far fewer people chasing approvals over email.",
-    stack: ["Node.js", "PostgreSQL", "React.js", "GitLab CI/CD", "RBAC"],
+    code: "CLGD",
+    name: "ClauseGuard",
+    kind: "Multi-Agent Contract & Policy Review Pipeline",
+    hook: "Upload a contract, get back a risk verdict — so a human reviewer starts from a report instead of a blank document.",
+    stack: ["Python", "FastAPI", "LangGraph", "Anthropic API", "Ollama", "Pydantic", "SQLite"],
+    url: repo("ClauseGuard"),
     body: [
-      "Directed backend and full-stack delivery of two role-specific portals (HR, Employee) covering records, attendance, leave, compensation, payroll documents, onboarding, training, and device tracking.",
-      "Reengineered PostgreSQL schemas, indexes, and queries to accelerate response times and eliminate recurring data-integrity defects.",
-      "Strengthened security via RBAC, audit logging, secure session handling, and 2FA-ready flows — improving access control and traceability.",
+      "Architected a LangGraph pipeline of three specialized agents — Extractor, Risk Analyzer, Summarizer — that segments contracts into labeled clauses, validates them against a configurable rule set, and produces a plain-English risk verdict.",
+      "Designed hybrid clause-matching retrieval: BM25 keyword search merged with local Ollama embeddings via reciprocal rank fusion, falling back automatically to keyword-only when no embedding model is available.",
+      "Validated every inter-agent hand-off against a Pydantic schema and covered the pipeline with a 23-test suite using mocked LLM calls.",
+      "Supports dual LLM backends — local Ollama for free offline runs, Anthropic API for higher-quality paid runs — chosen per run rather than baked in.",
     ],
     metrics: [
-      { k: "Portals shipped", v: "2" },
-      { k: "Workflows automated", v: "5" },
-      { k: "Deploys", v: "CI/CD" },
+      { k: "Specialized agents", v: "3" },
+      { k: "Test suite", v: "23" },
+      { k: "LLM backends", v: "2" },
     ],
   },
   {
     id: "F-03",
-    code: "CNTR",
-    name: "Contrast",
-    kind: "AI-Assisted Accessibility Auditing & Remediation Platform",
-    hook: "Fixes the accessibility failures automated scanners can only shrug at — then re-scans to prove it.",
-    stack: ["Node.js", "Puppeteer", "LangGraph", "Google Gemini API", "axe-core", "SQLite"],
+    code: "TBFX",
+    name: "TableFox",
+    kind: "PostgreSQL Schema Intelligence for AI Agents (MCP Server)",
+    hook: "An agent pointed at a database doesn't know the schema. Pasting the whole dump into every prompt is the usual fix — this is the better one.",
+    stack: ["Python", "FastAPI", "MCP", "PostgreSQL", "Next.js", "pytest"],
+    url: repo("TableFox"),
     body: [
-      "Shipped an end-to-end AI-assisted auditing and remediation pipeline — 7 phases, LangGraph-orchestrated over Puppeteer, axe-core/Lighthouse, and Gemini-based judgment calls — validated by a 68-test suite and zero axe violations in its own UI.",
-      "Automated fixes for issues tools alone can't judge — alt-text quality, heading semantics, link text, reading order — grounding every AI-generated remediation in a RAG pipeline over WCAG 2.2 criteria and house patterns, then re-verifying via fresh-browser re-scans.",
-      "Extended audits to authenticated, login-gated apps with zero credentials stored: sign-in walls are detected mid-crawl and only the resulting session is persisted, encrypted at rest (AES-256-GCM).",
+      "Built an MCP (Model Context Protocol) server exposing guarded, read-only PostgreSQL access to AI agents, with EXPLAIN-plan and cost-ceiling validation before any query executes.",
+      "Designed a BM25F-ranked searchable schema graph so agents locate the few relevant tables and columns instead of loading the full schema into context — cutting mean tokens per task from 1,240 to 879, a 29% reduction.",
+      "Benchmarked warm median latency at 1,200 ms against 2,396 ms for a naive full-schema baseline, and documented the honest caveat: a cold MCP process pays setup cost and only pulls ahead from the second task onward.",
+      "Covered the system with 67 pytest tests and ran it on a minimal-privilege, connection-pooled database role.",
     ],
     metrics: [
-      { k: "Pipeline phases", v: "7" },
-      { k: "Test suite", v: "68" },
-      { k: "Axe violations", v: "0" },
+      { k: "Token usage", v: "−29%" },
+      { k: "Warm median", v: "1,200ms" },
+      { k: "pytest tests", v: "67" },
     ],
   },
 ];
 
 /**
- * Partially-recovered archive: names and one-line framing only.
- * Deliberately thin — the source resume carries no detail for these.
- * Promote one into `files` above once real copy exists for it.
+ * Recovered files — smaller builds, every one a real public repo.
+ * Compact by design; the three above carry the weight.
  */
-export const archive = [
-  { code: "ASST", name: "Personal AI Assistant", hook: "Agentic assistant built around day-to-day workflow." },
-  { code: "PGIQ", name: "Postgres Schema Intelligence", hook: "Local-first schema context tool for AI agents." },
-  { code: "DENS", name: "Dense Visual Encoding", hook: "Experiment in high-density visual data encoding." },
-  { code: "BCST", name: "Intranet Audio Broadcast", hook: "Local-network audio broadcasting platform." },
-  { code: "RAGQ", name: "RAG Document Q&A", hook: "Retrieval-augmented question answering over documents." },
+export const recovered = [
+  {
+    code: "TASX",
+    name: "Two-Agent Self-Extending AI System",
+    hook: "A User Agent answers requests; a Builder Agent writes a new skill when none exists — sandboxed and approved before it can ever be invoked.",
+    stack: ["Python", "FastAPI"],
+    url: repo("two-agent-self-extending-ai-system"),
+  },
+  {
+    code: "GDC",
+    name: "Gradient Dense Code",
+    hook: "QR geometry carrying a second, separate payload in calibrated RGB — a normal scanner still reads the carrier; only the GDC decoder sees the color layer.",
+    stack: ["Python", "zlib", "CRC32"],
+    url: repo("GDC"),
+  },
+  {
+    code: "LDQA",
+    name: "LocalDocQA",
+    hook: "Offline document Q&A on CPU — PyMuPDF extraction, chunked context, locally cached transformers, no internet and no data leaving the machine.",
+    stack: ["Python", "Transformers", "PyMuPDF"],
+    url: repo("LocalDocQA"),
+  },
+  {
+    code: "ADIX",
+    name: "AuDiX",
+    hook: "Audio Distribution Exchange — low-latency audio broadcast across a local network, split into separate user and admin portals with role-based access.",
+    stack: ["Node.js", "PostgreSQL"],
+    url: repo("AuDix_User"),
+  },
 ];
 
 export const credentials = [
+  {
+    kind: "Education",
+    title: "Master of Computer Applications (MCA)",
+    detail: "In Progress",
+    org: "Sikkim Manipal University — Online",
+    place: "4 semesters, Fall 2026 intake",
+    period: "2026 – 2028",
+  },
   {
     kind: "Education",
     title: "Bachelor of Computer Applications (BCA)",
@@ -236,8 +276,8 @@ export const endpoints = [
 export const chapters = [
   { id: "profile", index: "01", label: "Profile" },
   { id: "access", index: "02", label: "Access" },
-  { id: "caselog", index: "03", label: "Case Log" },
-  { id: "files", index: "04", label: "Files" },
+  { id: "files", index: "03", label: "Files" },
+  { id: "caselog", index: "04", label: "Case Log" },
   { id: "creds", index: "05", label: "Credentials" },
   { id: "connect", index: "06", label: "Connect" },
 ];

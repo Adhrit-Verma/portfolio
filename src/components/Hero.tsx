@@ -8,6 +8,8 @@ import { Corners, Pill } from "./hud";
 
 const HeroField = dynamic(() => import("./HeroField"), { ssr: false });
 
+const ROLE_LINE = `${identity.role} // ${identity.tagline}`;
+
 /** Fires once the boot overlay is out of the way (or immediately, if it never ran). */
 function useBooted() {
   const [booted, setBooted] = useState(
@@ -41,7 +43,7 @@ export default function Hero() {
       const name = el.querySelector<HTMLElement>("[data-glitch]");
 
       if (reduced) {
-        if (role) role.textContent = identity.role;
+        if (role) role.textContent = ROLE_LINE;
         el.querySelectorAll<HTMLElement>("[data-count]").forEach((n) => {
           n.textContent = String(n.dataset.count);
         });
@@ -64,7 +66,7 @@ export default function Hero() {
         )
         .add(() => name && glitchCut(name), "-=0.55");
 
-      if (role) tl.add(typeOn(role, identity.role, 0.75), 0.45);
+      if (role) tl.add(typeOn(role, ROLE_LINE, 0.75), 0.45);
 
       el.querySelectorAll<HTMLElement>("[data-count]").forEach((n, i) => {
         tl.add(countUp(n, Number(n.dataset.count), 1.0), 0.7 + i * 0.08);
@@ -124,14 +126,15 @@ export default function Hero() {
           <p
             data-stagger
             className="chrome caret mt-6 min-h-[1.4em] text-signal-soft sm:text-xs"
-            aria-label={identity.role}
+            aria-label={ROLE_LINE}
           >
-            <span data-role>{identity.role}</span>
+            <span data-role>{ROLE_LINE}</span>
           </p>
 
           <p data-stagger className="mt-5 max-w-xl text-base leading-relaxed text-dim sm:text-lg">
-            Backend-first. Ships airline operations and HR platforms that people
-            depend on at 6am, then owns the pager when they do.
+            Builds multi-agent systems that do real work — contract review,
+            accessibility remediation, schema retrieval for agents — and has run a
+            regulated airline platform solo for two years.
           </p>
 
           {/* ctOS profile card */}
@@ -140,7 +143,7 @@ export default function Hero() {
             <dl className="grid grid-cols-2 gap-x-6 gap-y-4">
               {[
                 ["Occupation", identity.role],
-                ["Employer", "Newru Technologies"],
+                ["Employer", identity.employer],
                 ["Location", identity.location],
                 ["Active since", identity.since],
               ].map(([k, v]) => (
