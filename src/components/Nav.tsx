@@ -89,7 +89,7 @@ export default function Nav() {
                   </span>
                   <motion.span
                     aria-hidden="true"
-                    animate={{ width: on ? 22 : 10, backgroundColor: on ? "#FF6B1A" : "#3A424E" }}
+                    animate={{ width: on ? 22 : 10, backgroundColor: on ? "#FF6B1A" : "#3F3833" }}
                     transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     className="block h-px"
                   />

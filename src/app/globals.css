@@ -4,13 +4,13 @@
    DEDSEC DOSSIER — tokens. Source of truth: design-system.md
    ============================================================ */
 @theme {
-  --color-void: #0b0d10;
-  --color-panel: #12151a;
-  --color-panel-hi: #181c23;
-  --color-line: #262c35;
-  --color-line-hot: #3a424e;
-  --color-ink: #e8e6e1;
-  --color-dim: #9aa0a6;
+  --color-void: #0e0c0b;
+  --color-panel: #15120f;
+  --color-panel-hi: #1c1815;
+  --color-line: #2b2724;
+  --color-line-hot: #3f3833;
+  --color-ink: #ede9e3;
+  --color-dim: #a39c94;
   --color-signal: #ff6b1a;
   --color-signal-soft: #ff9552;
   --color-scan: #4fe3d6;
@@ -73,8 +73,8 @@
   .scanlines {
     background-image: repeating-linear-gradient(
       to bottom,
-      rgba(232, 230, 225, 0.055) 0px,
-      rgba(232, 230, 225, 0.055) 1px,
+      rgba(237, 233, 227, 0.055) 0px,
+      rgba(237, 233, 227, 0.055) 1px,
       transparent 1px,
       transparent 3px
     );

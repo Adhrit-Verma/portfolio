@@ -150,6 +150,32 @@ export const files = [
     hook: "Fixes the accessibility failures automated scanners can only shrug at — then re-tests every fix in a fresh browser before daring to call it fixed.",
     stack: ["Node.js", "LangGraph", "Puppeteer", "Google Gemini API", "axe-core", "SQLite"],
     url: repo("Contrast"),
+    figure: {
+      type: "shots" as const,
+      shots: [
+        {
+          src: "/work/contrast-overview.png",
+          w: 1280,
+          h: 820,
+          alt: "Contrast audit overview: a run listing 75 findings across 3 pages, with a severity breakdown of 36 critical, 12 serious and 27 moderate, and a banner stating that automated testing detects roughly 30-40% of WCAG issues.",
+          caption: "Run overview — measured findings separated from model judgments",
+        },
+        {
+          src: "/work/contrast-findings.png",
+          w: 1280,
+          h: 820,
+          alt: "Contrast findings view, listing individual accessibility violations with their severity and location.",
+          caption: "Findings",
+        },
+        {
+          src: "/work/contrast-composer.png",
+          w: 1280,
+          h: 820,
+          alt: "Contrast remediation composer in its light theme, showing a proposed code fix for an accessibility issue.",
+          caption: "Remediation composer",
+        },
+      ],
+    },
     body: [
       "Architected a 7-phase, LangGraph-orchestrated multi-agent pipeline composing Puppeteer crawling, axe-core/Lighthouse tooling, and Gemini-based judgment calls — validated end to end by a 72-test suite with zero axe violations in its own UI.",
       "Grounded AI-generated remediations in a RAG pipeline over WCAG 2.2 criteria and house patterns, re-verifying every fix via fresh-browser re-scans — a hand-built evaluation and regression loop for AI output quality.",
@@ -170,6 +196,16 @@ export const files = [
     hook: "Upload a contract, get back a risk verdict — so a human reviewer starts from a report instead of a blank document.",
     stack: ["Python", "FastAPI", "LangGraph", "Anthropic API", "Ollama", "Pydantic", "SQLite"],
     url: repo("ClauseGuard"),
+    figure: {
+      type: "pipeline" as const,
+      agents: [
+        { name: "Extractor", does: "Segments the contract into labeled clauses" },
+        { name: "Risk Analyzer", does: "Checks each clause against a configurable rule set" },
+        { name: "Summarizer", does: "Writes the plain-English verdict" },
+      ],
+      verdict: "HIGH_RISK",
+      note: "Every hand-off validated against a Pydantic schema",
+    },
     body: [
       "Architected a LangGraph pipeline of three specialized agents — Extractor, Risk Analyzer, Summarizer — that segments contracts into labeled clauses, validates them against a configurable rule set, and produces a plain-English risk verdict.",
       "Designed hybrid clause-matching retrieval: BM25 keyword search merged with local Ollama embeddings via reciprocal rank fusion, falling back automatically to keyword-only when no embedding model is available.",
@@ -190,6 +226,15 @@ export const files = [
     hook: "An agent pointed at a database doesn't know the schema. Pasting the whole dump into every prompt is the usual fix — this is the better one.",
     stack: ["Python", "FastAPI", "MCP", "PostgreSQL", "Next.js", "pytest"],
     url: repo("TableFox"),
+    figure: {
+      type: "bench" as const,
+      caption: "Measured over a 3-repeat run. Token counts varied by under 1%; latency is approximate.",
+      rows: [
+        { k: "Warm median latency", a: 1200, b: 2396, unit: "ms" },
+        { k: "Mean tokens per task", a: 879, b: 1240, unit: "" },
+      ],
+      legend: { a: "TableFox", b: "Full-schema baseline" },
+    },
     body: [
       "Built an MCP (Model Context Protocol) server exposing guarded, read-only PostgreSQL access to AI agents, with EXPLAIN-plan and cost-ceiling validation before any query executes.",
       "Designed a BM25F-ranked searchable schema graph so agents locate the few relevant tables and columns instead of loading the full schema into context — cutting mean tokens per task from 1,240 to 879, a 29% reduction.",
@@ -215,6 +260,16 @@ export const recovered = [
     hook: "A User Agent answers requests; a Builder Agent writes a new skill when none exists — sandboxed and approved before it can ever be invoked.",
     stack: ["Python", "FastAPI"],
     url: repo("two-agent-self-extending-ai-system"),
+    diagram: [
+      "request ─▶ UserAgent",
+      "             │",
+      "     skill approved? ──yes─▶ invoke",
+      "             │no",
+      "             ▼",
+      "         BuilderAgent",
+      "             │",
+      "   sandbox ─▶ review ─▶ registry",
+    ],
   },
   {
     code: "GDC",
@@ -222,6 +277,12 @@ export const recovered = [
     hook: "QR geometry carrying a second, separate payload in calibrated RGB — a normal scanner still reads the carrier; only the GDC decoder sees the color layer.",
     stack: ["Python", "zlib", "CRC32"],
     url: repo("GDC"),
+    image: {
+      src: "/work/gdc-encode.gif",
+      w: 760,
+      h: 760,
+      alt: "Animation showing a standard QR code transforming into a Gradient Dense Code, where the dark modules take on calibrated colour values carrying a second payload.",
+    },
   },
 ];
 

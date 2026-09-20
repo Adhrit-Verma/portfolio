@@ -13,20 +13,24 @@ Source of truth. Do not re-litigate these values elsewhere.
 
 | Token | Hex | Role |
 |---|---|---|
-| `void` | `#0B0D10` | Page ground. Warm off-black — never `#000`. |
-| `panel` | `#12151A` | Dossier card / panel fill. |
-| `panel-hi` | `#181C23` | Raised panel, hover state, table stripe. |
-| `line` | `#262C35` | Hairline borders, grid texture. |
-| `line-hot` | `#3A424E` | Active/hover hairline. |
-| `ink` | `#E8E6E1` | Body text. Warm off-white — never `#FFF` on dark. |
-| `dim` | `#9AA0A6` | Secondary text, metadata, timestamps. |
+| `void` | `#0E0C0B` | Page ground. Genuinely warm off-black (R>G>B) — never `#000`. |
+| `panel` | `#15120F` | Dossier card / panel fill. |
+| `panel-hi` | `#1C1815` | Raised panel, hover state, table stripe. |
+| `line` | `#2B2724` | Hairline borders, grid texture. |
+| `line-hot` | `#3F3833` | Active/hover hairline. |
+| `ink` | `#EDE9E3` | Body text. Warm off-white — never `#FFF` on dark. |
+| `dim` | `#A39C94` | Secondary text, metadata, timestamps. |
 | `signal` | `#FF6B1A` | **DedSec orange.** Primary accent, CTAs, active state, key numbers. |
 | `signal-soft` | `#FF9552` | Orange for smaller text where the pure hue gets shouty. |
 | `scan` | `#4FE3D6` | ctOS cyan. Secondary "scan/system" accent — brackets, sweep lines, readouts. |
 | `alert` | `#FF2E88` | **Transition only.** RGB-split channel + glitch cut. Never resting UI. |
 
 **Contrast (measured, on `void`)** — all pass WCAG AA for their use:
-`ink` 16.3:1 · `dim` 7.4:1 · `signal` 6.8:1 · `scan` 12.3:1.
+`ink` 16.1:1 · `dim` 7.2:1 · `signal` 6.8:1 · `signal-soft` 9.0:1 · `scan` 12.4:1.
+
+> The neutrals were originally cool (`#0B0D10` is blue-leaning) while this document
+> claimed they were warm. The whole ramp is now genuinely warm — R > G > B — which is
+> what the Watch_Dogs 2 reference actually looks like and what the copy above always said.
 `alert` is decorative only and never carries meaning alone.
 
 Rules:
@@ -71,7 +75,22 @@ Easing: `--ease-hud` `cubic-bezier(.16,1,.3,1)` for reveals (fast out, long sett
 - **Raw rAF** owns exactly one thing — the targeting reticle. It never touches React state per frame.
 - **Lenis** smooths the scroll and drives ScrollTrigger's ticker. Off under reduced-motion.
 
-## 4. Texture & iconography
+## 4. Imagery
+
+**The work is the picture.** A portfolio built entirely from type in bordered panels gives a
+reader nothing to look at, however well it is set. Every featured project carries a visual, and
+each is labelled for what it actually is so a screenshot is never mistaken for a diagram:
+
+| Treatment | Used by | What it is |
+|---|---|---|
+| Screenshots | Contrast | Real product captures from the repo — a large lead plus two secondary views. |
+| Schematic | ClauseGuard | Its actual three-agent graph, drawn. No UI exists to capture, and inventing one would be a lie. |
+| Benchmark | TableFox | Its published measurements as bars. Real numbers, caveats printed underneath. |
+
+Colour comes from the work, not from added chrome — Contrast's own coral UI and GDC's colour-coded
+carrier supply it. The page stays neutral so the projects can be the loud thing.
+
+## 5. Texture & iconography
 
 - **Circuit grid**: 1px lines at 3% alpha on a 48px pitch, plus a radial vignette. Background only, never over text.
 - **Scanlines**: 2px repeating overlay at ~4% — only during `boot` and `glitchCut`, never resting.
@@ -79,7 +98,7 @@ Easing: `--ease-hud` `cubic-bezier(.16,1,.3,1)` for reveals (fast out, long sett
   set in mono, rotated a degree or two, low alpha. WD2's street-art layer, used maybe six times site-wide.
 - **Corner brackets** replace card borders as the primary framing device — a box is *scanned*, not drawn.
 
-## 5. Accessibility floor
+## 6. Accessibility floor
 
 The site owner ships an accessibility auditor. Hold the bar.
 

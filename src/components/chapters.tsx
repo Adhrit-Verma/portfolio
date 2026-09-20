@@ -176,7 +176,7 @@ export function Connect() {
                   href={e.href}
                   target={e.proto === "HTTPS" ? "_blank" : undefined}
                   rel={e.proto === "HTTPS" ? "noreferrer" : undefined}
-                  whileHover={{ backgroundColor: "rgba(24,28,35,0.9)" }}
+                  whileHover={{ backgroundColor: "rgba(28,24,21,0.9)" }}
                   className="flex items-center gap-4 border-b border-line px-4 py-5 last:border-0"
                 >
                   <span className="chrome w-14 shrink-0 text-scan">{e.proto}</span>

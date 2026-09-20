@@ -55,7 +55,7 @@ const fragment = /* glsl */ `
     float g = texture2D(uTex, uv).a;
     float b = texture2D(uTex, uv - vec2(ca, 0.0)).a;
 
-    vec3 ink  = vec3(0.910, 0.902, 0.882); // --color-ink
+    vec3 ink  = vec3(0.929, 0.914, 0.890); // --color-ink
     vec3 hot  = vec3(1.000, 0.180, 0.533); // --color-alert
     vec3 cool = vec3(0.310, 0.890, 0.839); // --color-scan
 

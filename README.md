@@ -61,6 +61,8 @@ Next.js runtime takes over from there.
 | [src/components/AgentGraph.tsx](src/components/AgentGraph.tsx) | 3D layer 2 — the LangGraph pipeline topology, execution front driven by scroll. |
 | [src/components/ShaderTitle.tsx](src/components/ShaderTitle.tsx) | 3D layer 3 — the headline corruption shader (GLSL). |
 | [src/components/CtosCursor.tsx](src/components/CtosCursor.tsx) | The targeting reticle. Raw rAF, no React state per frame. |
+| [src/components/ProjectFigure.tsx](src/components/ProjectFigure.tsx) | Each project's visual — screenshots, schematic, or benchmark. |
+| [public/work/](public/work/) | Real product imagery, pulled from the project repos. |
 | [src/components/](src/components/) | One file per chapter. `chapters.tsx` holds the four simpler ones. |
 
 ## The chapters
@@ -100,6 +102,20 @@ The site owner ships an accessibility auditor, so the bar is that bar.
   animations only take content away and hand it back.
 - Skip link, one `h1`, `<section aria-labelledby>` per chapter, visible cyan `:focus-visible` ring,
   status carried by text (`LOCKED` / `DECRYPTED`) rather than color alone.
+
+## Imagery
+
+Every featured project carries a visual, because a portfolio made only of type gives a reader
+nothing to look at. All of it is real and each is labelled for what it is:
+
+- **Contrast** — actual product screenshots from `Adhrit-Verma/Contrast/docs`.
+- **ClauseGuard** — a drawn schematic of its real three-agent graph. It has no UI to capture, and
+  a fabricated screenshot would be a lie, so the figure says "Schematic — not a screenshot".
+- **TableFox** — its published benchmark as bars, with the measurement caveats printed underneath.
+- **Gradient Dense Code** — the repo's own encode animation.
+
+To refresh the screenshots, re-download them into `public/work/` from the source repos; the paths
+live in `src/lib/resume.ts`.
 
 ## Content notes
 

@@ -21,7 +21,7 @@ const LAYERS = [1, 3, 5, 4, 3, 1];
 const SPAN_X = 4.6;
 const FANOUT = 3; // edges per node to the next layer
 
-const COLD = new THREE.Color("#2b3542");
+const COLD = new THREE.Color("#332d28");
 const HOT = new THREE.Color("#ff6b1a");
 
 function buildGraph() {
