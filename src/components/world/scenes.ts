@@ -33,7 +33,8 @@ export function homeScenes(narrow: boolean): SceneDef[] {
     { id: "s-intro", form: "mask:scan", from: { pos: [-2, -1, 42 * zf], look: maskLook }, to: { pos: [3, 0, 35 * zf], look: [maskLook[0] + 1, maskLook[1] + 0.5, 0] }, fov: 42 },
     { id: "s-dive-a", form: "mask:idle", from: { pos: [3, 0, 35 * zf], look: [maskLook[0] + 1, maskLook[1] + 0.5, 0] }, to: { pos: [-3.4, 0, 1.6], look: [-3.4, 0, -12] }, fov: 50, roll: [0, 0.6] },
     { id: "s-dive-b", form: "tunnel", from: { pos: [0, 0, 6], look: [0, 0, -20] }, to: { pos: [0, 0, -92], look: [0, 0, -130] }, fov: 80, roll: [0.6, 3.4] },
-    { id: "s-stats", form: "wall:ONLINE", from: { pos: [-2.5, -3, 31 * (narrow ? 2.9 : 1)], look: [0, wallLook, 0] }, to: { pos: [2.5, -2.5, 28 * (narrow ? 2.9 : 1)], look: [0, wallLook + 0.4, 0] }, fov: 44 },
+    // phones: a wider lens, not more distance — past ~70 units the wall sinks into the fog
+    { id: "s-stats", form: "wall:ONLINE", from: { pos: [-2.5, -3, 31 * (narrow ? 1.6 : 1)], look: [0, wallLook, 0] }, to: { pos: [2.5, -2.5, 28 * (narrow ? 1.6 : 1)], look: [0, wallLook + 0.4, 0] }, fov: narrow ? 72 : 44 },
     ...featured.map((p) => glyphScene(`ch-${p.slug}`, p.slug, narrow)),
     glyphScene("s-archive", "gdc", narrow),
     { id: "s-stack", form: "atom", ...orbit(narrow ? 48 : 33, 0, 1.2, 6, narrow ? [0, -12, 0] : [0, 0, 0]), fov: 44 },
