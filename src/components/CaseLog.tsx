@@ -4,7 +4,7 @@ import { experience } from "@/lib/resume";
 import { gsap, useGsapScope, useReducedMotion } from "@/lib/motion";
 import { Chapter, ChapterHeader, Pill, ScanPanel, Stencil } from "./hud";
 
-/* ------------------------------------------------------------------ 03 CASE LOG */
+/* ------------------------------------------------------------------ 03 CASE LOG (record page) */
 
 export default function CaseLog() {
   const reduced = useReducedMotion();
@@ -38,7 +38,7 @@ export default function CaseLog() {
 
       <ChapterHeader
         id="caselog-title"
-        index="04"
+        index="03"
         label="Case Log"
         title="Employment Record"
         meta="STATUS: ACTIVE"
@@ -52,7 +52,7 @@ export default function CaseLog() {
 
         {experience.map((job) => (
           <div key={job.org} className="pl-6 sm:pl-10">
-            <div className="sticky top-12 z-10 -mx-1 bg-void/90 py-4 backdrop-blur-sm">
+            <div className="sticky top-12 z-10 -mx-1 bg-void/95 py-4">
               <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
                 <h3 className="text-2xl font-bold uppercase tracking-wide sm:text-4xl">{job.org}</h3>
                 <span className="chrome tabnum text-signal">{job.period}</span>
@@ -73,7 +73,7 @@ export default function CaseLog() {
 
             <div className="mt-8 space-y-6">
               {job.missions.map((m) => (
-                <ScanPanel key={m.code} className="bg-panel/40 p-5 sm:p-7">
+                <ScanPanel key={m.code} className="glass p-5 sm:p-7">
                   <span
                     aria-hidden="true"
                     className="absolute -left-[26px] top-8 hidden h-px w-5 bg-line-hot sm:block"
@@ -96,7 +96,7 @@ export default function CaseLog() {
                   <ul className="max-w-3xl space-y-3.5">
                     {m.log.map((line, i) => (
                       <li key={i} data-stagger className="flex gap-4">
-                        <span aria-hidden="true" className="chrome tabnum shrink-0 pt-1.5 text-dim/60">
+                        <span aria-hidden="true" className="chrome tabnum shrink-0 pt-1.5 text-dim">
                           {String(i + 1).padStart(2, "0")}
                         </span>
                         <span className="text-[15px] leading-relaxed text-dim sm:text-base">{line}</span>

@@ -1,26 +1,19 @@
 "use client";
 
 /**
- * The visual for each featured project — the thing the Files chapter was
- * missing. A portfolio of text boxes gives a reader nothing to look at.
- *
- * Three treatments, because only one project has a UI to screenshot and
- * inventing the other two would be a lie:
- *   shots    — Contrast's real product screenshots, layered for depth
- *   pipeline — ClauseGuard's actual three-agent graph, drawn as a schematic
- *   bench    — TableFox's published benchmark, drawn as bars from real numbers
- *
- * Each is labelled for what it is, so a screenshot never gets confused with a
- * diagram.
+ * Project evidence, each labelled for what it is so a screenshot is never
+ * mistaken for a diagram:
+ *   Shots     — real product captures from the repo
+ *   Bench     — published measurements drawn as bars, caveat underneath
+ *   Film      — a finished film with sound, click to play
  */
 
 import Image from "next/image";
-import type { files } from "@/lib/resume";
+import { useState } from "react";
+import type { Project, Shot } from "@/lib/projects";
 import { Corners } from "./hud";
 
-type Figure = NonNullable<(typeof files)[number]["figure"]>;
-
-function Frame({
+export function Frame({
   children,
   label,
   className = "",
@@ -40,12 +33,10 @@ function Frame({
   );
 }
 
-/* ---------------------------------------------------------------- screenshots */
-
-function Shots({ figure }: { figure: Extract<Figure, { type: "shots" }> }) {
-  const [lead, ...rest] = figure.shots;
+export function Shots({ shots }: { shots: Shot[] }) {
+  const [lead, ...rest] = shots;
   return (
-    <div data-stagger>
+    <div>
       <Frame label={`Screenshot — ${lead.caption}`}>
         <Image
           src={lead.src}
@@ -57,133 +48,116 @@ function Shots({ figure }: { figure: Extract<Figure, { type: "shots" }> }) {
           loading="lazy"
         />
       </Frame>
-
-      {/* Secondary views, smaller — depth without burying the lead. */}
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        {rest.map((s) => (
-          <figure key={s.src} className="relative border border-line bg-panel/40 p-2">
-            <Image
-              src={s.src}
-              width={s.w}
-              height={s.h}
-              alt={s.alt}
-              className="h-auto w-full opacity-80 transition-opacity duration-500 hover:opacity-100"
-              sizes="(max-width: 640px) 100vw, 520px"
-              loading="lazy"
-            />
-            <figcaption className="mt-2 font-mono text-xs text-dim/80">{s.caption}</figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ schematic */
-
-function Pipeline({ figure }: { figure: Extract<Figure, { type: "pipeline" }> }) {
-  return (
-    <div data-stagger>
-      <Frame label="Schematic — not a screenshot">
-        <div className="px-3 py-8 sm:px-8 sm:py-14">
-          <ol className="grid gap-5 md:grid-cols-3">
-            {figure.agents.map((a, i) => (
-              <li key={a.name} className="relative">
-                <div className="h-full border border-line-hot/70 bg-void/70 p-5">
-                  <span className="chrome text-scan">AGENT {String(i + 1).padStart(2, "0")}</span>
-                  <h4 className="mt-3 font-display text-xl font-bold uppercase tracking-wide text-ink">
-                    {a.name}
-                  </h4>
-                  <p className="mt-2 text-sm leading-relaxed text-dim">{a.does}</p>
-                </div>
-                {i < figure.agents.length - 1 && (
-                  <span
-                    aria-hidden="true"
-                    className="chrome absolute -bottom-4 left-1/2 -translate-x-1/2 text-signal md:-right-4 md:bottom-auto md:left-auto md:top-1/2 md:-translate-y-1/2 md:translate-x-0"
-                  >
-                    <span className="md:hidden">↓</span>
-                    <span className="hidden md:inline">→</span>
-                  </span>
-                )}
-              </li>
-            ))}
-          </ol>
-
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6">
-            <p className="chrome text-dim">{figure.note}</p>
-            <p className="chrome border border-alert/50 px-3 py-2 text-alert">
-              VERDICT: {figure.verdict}
-            </p>
-          </div>
+      {rest.length > 0 && (
+        <div className="mt-4 grid items-start gap-4 sm:grid-cols-2">
+          {rest.map((s) => (
+            <figure key={s.src} className="relative border border-line bg-panel/40 p-2">
+              <Image
+                src={s.src}
+                width={s.w}
+                height={s.h}
+                alt={s.alt}
+                className="h-auto w-full opacity-85 transition-opacity duration-500 hover:opacity-100"
+                sizes="(max-width: 640px) 100vw, 520px"
+                loading="lazy"
+              />
+              <figcaption className="mt-2 font-mono text-xs text-dim">{s.caption}</figcaption>
+            </figure>
+          ))}
         </div>
-      </Frame>
+      )}
     </div>
   );
 }
 
-/* ------------------------------------------------------------------ benchmark */
-
-function Bench({ figure }: { figure: Extract<Figure, { type: "bench" }> }) {
+export function Bench({ bench }: { bench: NonNullable<Project["bench"]> }) {
   return (
-    <div data-stagger>
-      <Frame label="Published benchmark — real measurements">
-        <div className="px-4 py-8 sm:px-10 sm:py-12">
-          <div className="mb-8 flex flex-wrap gap-x-7 gap-y-2">
-            <span className="chrome flex items-center gap-2 text-ink">
-              <span aria-hidden="true" className="h-2.5 w-5 bg-signal" />
-              {figure.legend.a}
-            </span>
-            <span className="chrome flex items-center gap-2 text-dim">
-              <span aria-hidden="true" className="h-2.5 w-5 bg-line-hot" />
-              {figure.legend.b}
-            </span>
-          </div>
+    <Frame label="Published measurements — real numbers from the repo">
+      <div className="px-4 py-8 sm:px-10 sm:py-12">
+        <div className="mb-8 flex flex-wrap gap-x-7 gap-y-2">
+          <span className="chrome flex items-center gap-2 text-ink">
+            <span aria-hidden="true" className="h-2.5 w-5 bg-signal" />
+            {bench.legend.a}
+          </span>
+          <span className="chrome flex items-center gap-2 text-dim">
+            <span aria-hidden="true" className="h-2.5 w-5 bg-line-hot" />
+            {bench.legend.b}
+          </span>
+        </div>
 
-          <dl className="space-y-9">
-            {figure.rows.map((r) => {
-              const max = Math.max(r.a, r.b);
-              return (
-                <div key={r.k}>
-                  <dt className="chrome mb-4 text-dim">{r.k}</dt>
-                  <dd className="space-y-2.5">
-                    {(
-                      [
-                        [figure.legend.a, r.a, "bg-signal", "text-signal"],
-                        [figure.legend.b, r.b, "bg-line-hot", "text-dim"],
-                      ] as const
-                    ).map(([name, v, bar, tone]) => (
-                      <div key={name} className="flex items-center gap-4">
-                        <div className="h-7 flex-1 bg-panel-hi/60">
-                          <div
-                            className={`h-7 ${bar}`}
-                            style={{ width: `${(v / max) * 100}%` }}
-                          />
-                        </div>
-                        <span
-                          className={`tabnum w-28 shrink-0 text-right font-display text-lg font-bold sm:text-2xl ${tone}`}
-                        >
-                          {v.toLocaleString()}
-                          {r.unit}
-                        </span>
+        <dl className="space-y-9">
+          {bench.rows.map((r) => {
+            const max = Math.max(r.a, r.b);
+            return (
+              <div key={r.k}>
+                <dt className="chrome mb-4 text-dim">
+                  {r.k}
+                  {r.lowerIsBetter && <span className="text-dim"> · lower is better</span>}
+                </dt>
+                <dd className="space-y-2.5">
+                  {(
+                    [
+                      [bench.legend.a, r.a, "bg-signal", "text-signal"],
+                      [bench.legend.b, r.b, "bg-line-hot", "text-dim"],
+                    ] as const
+                  ).map(([name, v, bar, tone]) => (
+                    <div key={name} className="flex items-center gap-4">
+                      <div className="h-7 flex-1 bg-panel-hi/60">
+                        <div className={`h-7 ${bar}`} style={{ width: `${(v / max) * 100}%` }} />
                       </div>
-                    ))}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
+                      <span
+                        className={`tabnum w-28 shrink-0 text-right font-display text-lg font-bold sm:text-2xl ${tone}`}
+                      >
+                        <span className="sr-only">{name}: </span>
+                        {v.toLocaleString("en-US")}
+                        {r.unit}
+                      </span>
+                    </div>
+                  ))}
+                </dd>
+              </div>
+            );
+          })}
+        </dl>
 
-          <p className="mt-8 border-t border-line pt-5 text-xs leading-relaxed text-dim/80">
-            {figure.caption}
-          </p>
-        </div>
-      </Frame>
-    </div>
+        <p className="mt-8 border-t border-line pt-5 text-xs leading-relaxed text-dim">{bench.caption}</p>
+      </div>
+    </Frame>
   );
 }
 
-export default function ProjectFigure({ figure }: { figure: Figure }) {
-  if (figure.type === "shots") return <Shots figure={figure} />;
-  if (figure.type === "pipeline") return <Pipeline figure={figure} />;
-  return <Bench figure={figure} />;
+/** A film with a soundtrack: the visitor starts it. Native controls, keyboard-operable. */
+export function Film({ film, name }: { film: NonNullable<Project["film"]>; name: string }) {
+  const [started, setStarted] = useState(false);
+  return (
+    <Frame label={`${film.caption} · ${film.duration} · sound on`}>
+      <div className="relative">
+        <video
+          src={film.src}
+          poster={film.poster}
+          controls={started}
+          playsInline
+          preload="none"
+          className="block aspect-video w-full bg-void"
+          aria-label={`${name} launch film`}
+          onPlay={() => setStarted(true)}
+        />
+        {!started && (
+          <button
+            type="button"
+            onClick={(e) => {
+              setStarted(true);
+              (e.currentTarget.previousElementSibling as HTMLVideoElement).play().catch(() => {});
+            }}
+            className="group absolute inset-0 flex items-end justify-start bg-gradient-to-t from-void/70 to-transparent p-4 transition-colors sm:p-6"
+            aria-label={`Play the ${name} launch film, ${film.duration}, with sound`}
+          >
+            <span className="chrome flex items-center gap-3 border border-signal bg-void/85 px-5 py-4 text-signal-soft transition-colors group-hover:bg-signal group-hover:text-void">
+              <span aria-hidden="true">▶</span> Play film · {film.duration}
+            </span>
+          </button>
+        )}
+      </div>
+    </Frame>
+  );
 }

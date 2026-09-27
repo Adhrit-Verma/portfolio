@@ -44,7 +44,12 @@ export function useCoarsePointer() {
   return useMedia("(pointer: coarse)", true);
 }
 
-/** Coarse pointer, narrow screen, or few cores => skip the 3D layer entirely. */
+/** Phone-width layout: the world frames its subject centred instead of beside the text. */
+export function useNarrow() {
+  return useMedia("(max-width: 767px)", false);
+}
+
+/** Coarse pointer, narrow screen, or few cores => the lite 3D world (fewer shapes, no post). */
 export function useLowPower() {
   const coarse = useMedia("(pointer: coarse)", true);
   const narrow = useMedia("(max-width: 767px)", true);

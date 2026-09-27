@@ -1,9 +1,10 @@
-# DEDSEC DOSSIER — Adhrit Verma
+# DEDSEC://BROADCAST — Adhrit Verma
 
-A scroll-driven portfolio built as a **ctOS-style profile hack**: you don't browse sections,
-you decrypt a dossier. Positioned as **AI Software Engineer** — LangGraph multi-agent pipelines,
-RAG retrieval, and MCP. Watch_Dogs 2's San Francisco hacktivist language — DedSec orange on warm
-off-black, HUD scan-boxes, glitch as a *cut* — not Watch_Dogs 1's grim green-on-black terminal.
+Portfolio for an **AI Software Engineer** (LangGraph multi-agent pipelines, RAG, MCP), built as a
+Watch_Dogs 2 pirate broadcast: one real-time 3D world behind every page, a camera that flies through it
+as you scroll, and a swarm of 740 shapes that re-forms into each project — under street-poster type,
+sticker tape and pixel art. Pages: `/` (the broadcast), `/work` (every file), `/work/[slug]` (a flight
+through one project: purpose, the pipeline node by node, perks, stack, evidence, limits), `/record`.
 
 ## Run it
 
@@ -52,18 +53,19 @@ Next.js runtime takes over from there.
 
 | Path | What |
 |---|---|
-| [design-system.md](design-system.md) | **Read this first.** Palette, type pairing, the five named motion patterns, accessibility floor. Source of truth. |
-| [src/lib/resume.ts](src/lib/resume.ts) | **Every word on the site.** Copy lifted verbatim from the resume PDF. Edit content here, never in components. |
-| [src/lib/motion.ts](src/lib/motion.ts) | The motion vocabulary — `scan`, `typeOn`, `countUp`, `glitchCut` — plus the media-query hooks. |
-| [src/app/globals.css](src/app/globals.css) | Design tokens as a Tailwind v4 `@theme` block, texture classes, keyframes, reduced-motion rules. |
-| [src/components/hud.tsx](src/components/hud.tsx) | HUD primitives: `ScanPanel`, `Corners`, `ChapterHeader`, `Pill`, `Stencil`. |
-| [src/components/HeroField.tsx](src/components/HeroField.tsx) | 3D layer 1 — the hero node cloud. |
-| [src/components/AgentGraph.tsx](src/components/AgentGraph.tsx) | 3D layer 2 — the LangGraph pipeline topology, execution front driven by scroll. |
-| [src/components/ShaderTitle.tsx](src/components/ShaderTitle.tsx) | 3D layer 3 — the headline corruption shader (GLSL). |
-| [src/components/CtosCursor.tsx](src/components/CtosCursor.tsx) | The targeting reticle. Raw rAF, no React state per frame. |
-| [src/components/ProjectFigure.tsx](src/components/ProjectFigure.tsx) | Each project's visual — screenshots, schematic, or benchmark. |
-| [public/work/](public/work/) | Real product imagery, pulled from the project repos. |
-| [src/components/](src/components/) | One file per chapter. `chapters.tsx` holds the four simpler ones. |
+| [design-system.md](design-system.md) | **Read this first.** Palette, type, the world, motion vocabulary, performance rules, accessibility floor. |
+| [src/lib/projects.ts](src/lib/projects.ts) | **Every project** — purpose, perks, tech + role, metrics, flow, limits — from each repo's README. |
+| [src/lib/resume.ts](src/lib/resume.ts) | Identity, experience, skills, credentials. Edit content here, never in components. |
+| [src/components/world/](src/components/world/) | The 3D world: `formations.ts` (where the shapes go), `scenes.ts` (camera direction per page), `World.tsx` (renderer, GPU swarm, pacing, quality governor). |
+| [src/components/home.tsx](src/components/home.tsx) | The home broadcast: intro, dive, stats, channels, archive, loadout, connect. |
+| [src/components/Dossier.tsx](src/components/Dossier.tsx) | A project page. `WorkIndex.tsx` is `/work`; `chapters.tsx` + `CaseLog.tsx` are `/record`. |
+| [src/components/pop.tsx](src/components/pop.tsx) | Kinetic poster type, tape, stickers, shapes, the off-screen animation gate. |
+| [src/components/pixel.tsx](src/components/pixel.tsx) | LED face, pixel meter, 8×8 icons, Bayer-dither page cut. |
+| [art/blender/](art/blender/) | Procedural Blender artifacts → `art/renders/*.webp` (Blender 5.2, `./render_all.sh [slug…]`). Used by the share cards. |
+| [video/](video/) | Remotion: composes the OpenGraph share cards → `public/og/*.jpg` (`cd video && npm i && npm run render`). |
+| [scripts/inspect.mjs](scripts/inspect.mjs) | UI inspection (Playwright + axe): frames as a visitor sees them + every scene settled. Used by the `ui-inspector` agent. |
+| [scripts/perf.mjs](scripts/perf.mjs) | Frame-time benchmark at 1× and 4× CPU; `PROFILE=1` for a self-time profile. `layout-trace.mjs` finds forced layouts. |
+| [public/work/](public/work/) | Real product imagery from the project repos, and Jimmy's launch film. |
 
 ## The chapters
 

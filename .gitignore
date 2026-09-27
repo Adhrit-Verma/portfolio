@@ -45,3 +45,6 @@ next-env.d.ts
 
 # reference material, not part of the site
 *.zip
+
+# UI inspector output
+/inspect/

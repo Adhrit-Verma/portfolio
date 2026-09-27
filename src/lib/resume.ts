@@ -6,12 +6,13 @@
  * github.com/Adhrit-Verma. Where a repo and a resume disagree, the repo wins —
  * it is the artifact a reader can actually go and verify.
  *
+ * Projects live in projects.ts.
+ *
  * Known divergence: Contrast's suite is 72 tests in the repo; both resume PDFs
  * still say 68. This file uses 72.
  */
 export const LINKEDIN = "https://www.linkedin.com/in/adhrit-verma/";
 export const GITHUB = "https://github.com/Adhrit-Verma";
-const repo = (name: string) => `${GITHUB}/${name}`;
 
 export const identity = {
   name: "Adhrit Verma",
@@ -140,152 +141,6 @@ export const experience = [
   },
 ];
 
-/** Featured dossiers — the three production AI systems, each with a live repo. */
-export const files = [
-  {
-    id: "F-01",
-    code: "CNTR",
-    name: "Contrast",
-    kind: "AI-Assisted Accessibility Auditing & Remediation Platform",
-    hook: "Fixes the accessibility failures automated scanners can only shrug at — then re-tests every fix in a fresh browser before daring to call it fixed.",
-    stack: ["Node.js", "LangGraph", "Puppeteer", "Google Gemini API", "axe-core", "SQLite"],
-    url: repo("Contrast"),
-    figure: {
-      type: "shots" as const,
-      shots: [
-        {
-          src: "/work/contrast-overview.png",
-          w: 1280,
-          h: 820,
-          alt: "Contrast audit overview: a run listing 75 findings across 3 pages, with a severity breakdown of 36 critical, 12 serious and 27 moderate, and a banner stating that automated testing detects roughly 30-40% of WCAG issues.",
-          caption: "Run overview — measured findings separated from model judgments",
-        },
-        {
-          src: "/work/contrast-findings.png",
-          w: 1280,
-          h: 820,
-          alt: "Contrast findings view, listing individual accessibility violations with their severity and location.",
-          caption: "Findings",
-        },
-        {
-          src: "/work/contrast-composer.png",
-          w: 1280,
-          h: 820,
-          alt: "Contrast remediation composer in its light theme, showing a proposed code fix for an accessibility issue.",
-          caption: "Remediation composer",
-        },
-      ],
-    },
-    body: [
-      "Architected a 7-phase, LangGraph-orchestrated multi-agent pipeline composing Puppeteer crawling, axe-core/Lighthouse tooling, and Gemini-based judgment calls — validated end to end by a 72-test suite with zero axe violations in its own UI.",
-      "Grounded AI-generated remediations in a RAG pipeline over WCAG 2.2 criteria and house patterns, re-verifying every fix via fresh-browser re-scans — a hand-built evaluation and regression loop for AI output quality.",
-      "Extended audits to authenticated, login-gated apps with zero credentials stored, by detecting sign-in walls mid-crawl and persisting only an encrypted session (AES-256-GCM).",
-      "Separates what it measured from what a model assessed, and states plainly that automated testing catches only 30–40% of WCAG issues — a capacity multiplier for human auditors, not a conformance claim.",
-    ],
-    metrics: [
-      { k: "Pipeline phases", v: "7" },
-      { k: "Test suite", v: "72" },
-      { k: "Axe violations", v: "0" },
-    ],
-  },
-  {
-    id: "F-02",
-    code: "CLGD",
-    name: "ClauseGuard",
-    kind: "Multi-Agent Contract & Policy Review Pipeline",
-    hook: "Upload a contract, get back a risk verdict — so a human reviewer starts from a report instead of a blank document.",
-    stack: ["Python", "FastAPI", "LangGraph", "Anthropic API", "Ollama", "Pydantic", "SQLite"],
-    url: repo("ClauseGuard"),
-    figure: {
-      type: "pipeline" as const,
-      agents: [
-        { name: "Extractor", does: "Segments the contract into labeled clauses" },
-        { name: "Risk Analyzer", does: "Checks each clause against a configurable rule set" },
-        { name: "Summarizer", does: "Writes the plain-English verdict" },
-      ],
-      verdict: "HIGH_RISK",
-      note: "Every hand-off validated against a Pydantic schema",
-    },
-    body: [
-      "Architected a LangGraph pipeline of three specialized agents — Extractor, Risk Analyzer, Summarizer — that segments contracts into labeled clauses, validates them against a configurable rule set, and produces a plain-English risk verdict.",
-      "Designed hybrid clause-matching retrieval: BM25 keyword search merged with local Ollama embeddings via reciprocal rank fusion, falling back automatically to keyword-only when no embedding model is available.",
-      "Validated every inter-agent hand-off against a Pydantic schema and covered the pipeline with a 23-test suite using mocked LLM calls.",
-      "Supports dual LLM backends — local Ollama for free offline runs, Anthropic API for higher-quality paid runs — chosen per run rather than baked in.",
-    ],
-    metrics: [
-      { k: "Specialized agents", v: "3" },
-      { k: "Test suite", v: "23" },
-      { k: "LLM backends", v: "2" },
-    ],
-  },
-  {
-    id: "F-03",
-    code: "TBFX",
-    name: "TableFox",
-    kind: "PostgreSQL Schema Intelligence for AI Agents (MCP Server)",
-    hook: "An agent pointed at a database doesn't know the schema. Pasting the whole dump into every prompt is the usual fix — this is the better one.",
-    stack: ["Python", "FastAPI", "MCP", "PostgreSQL", "Next.js", "pytest"],
-    url: repo("TableFox"),
-    figure: {
-      type: "bench" as const,
-      caption: "Measured over a 3-repeat run. Token counts varied by under 1%; latency is approximate.",
-      rows: [
-        { k: "Warm median latency", a: 1200, b: 2396, unit: "ms" },
-        { k: "Mean tokens per task", a: 879, b: 1240, unit: "" },
-      ],
-      legend: { a: "TableFox", b: "Full-schema baseline" },
-    },
-    body: [
-      "Built an MCP (Model Context Protocol) server exposing guarded, read-only PostgreSQL access to AI agents, with EXPLAIN-plan and cost-ceiling validation before any query executes.",
-      "Designed a BM25F-ranked searchable schema graph so agents locate the few relevant tables and columns instead of loading the full schema into context — cutting mean tokens per task from 1,240 to 879, a 29% reduction.",
-      "Benchmarked warm median latency at 1,200 ms against 2,396 ms for a naive full-schema baseline, and documented the honest caveat: a cold MCP process pays setup cost and only pulls ahead from the second task onward.",
-      "Covered the system with 67 pytest tests and ran it on a minimal-privilege, connection-pooled database role.",
-    ],
-    metrics: [
-      { k: "Token usage", v: "−29%" },
-      { k: "Warm median", v: "1,200ms" },
-      { k: "pytest tests", v: "67" },
-    ],
-  },
-];
-
-/**
- * Recovered files — the two smaller builds worth a reader's time.
- * Deliberately short: a long tail of minor repos dilutes the three above.
- */
-export const recovered = [
-  {
-    code: "TASX",
-    name: "Two-Agent Self-Extending AI System",
-    hook: "A User Agent answers requests; a Builder Agent writes a new skill when none exists — sandboxed and approved before it can ever be invoked.",
-    stack: ["Python", "FastAPI"],
-    url: repo("two-agent-self-extending-ai-system"),
-    diagram: [
-      "request ─▶ UserAgent",
-      "             │",
-      "     skill approved? ──yes─▶ invoke",
-      "             │no",
-      "             ▼",
-      "         BuilderAgent",
-      "             │",
-      "   sandbox ─▶ review ─▶ registry",
-    ],
-  },
-  {
-    code: "GDC",
-    name: "Gradient Dense Code",
-    hook: "QR geometry carrying a second, separate payload in calibrated RGB — a normal scanner still reads the carrier; only the GDC decoder sees the color layer.",
-    stack: ["Python", "zlib", "CRC32"],
-    url: repo("GDC"),
-    image: {
-      src: "/work/gdc-encode.gif",
-      w: 760,
-      h: 760,
-      alt: "Animation showing a standard QR code transforming into a Gradient Dense Code, where the dark modules take on calibrated colour values carrying a second payload.",
-    },
-  },
-];
-
 export const credentials = [
   {
     kind: "Education",
@@ -320,11 +175,10 @@ export const endpoints = [
   { label: "GitHub", value: "@Adhrit-Verma", href: GITHUB, proto: "HTTPS" },
 ];
 
+/** The record page's chapters — the rail in Nav.tsx jumps between these. */
 export const chapters = [
   { id: "profile", index: "01", label: "Profile" },
-  { id: "access", index: "02", label: "Access" },
-  { id: "files", index: "03", label: "Files" },
-  { id: "caselog", index: "04", label: "Case Log" },
-  { id: "creds", index: "05", label: "Credentials" },
-  { id: "connect", index: "06", label: "Connect" },
+  { id: "access", index: "02", label: "Toolkit" },
+  { id: "caselog", index: "03", label: "Case Log" },
+  { id: "creds", index: "04", label: "Credentials" },
 ];

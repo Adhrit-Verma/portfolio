@@ -1,14 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
-import {
-  credentials,
-  endpoints,
-  identity,
-  profileTraits,
-  skillModules,
-  summary,
-} from "@/lib/resume";
+import { credentials, identity, profileTraits, skillModules, summary } from "@/lib/resume";
 import { Chapter, ChapterHeader, Pill, ScanPanel, Stencil } from "./hud";
 
 /* ------------------------------------------------------------------ 01 PROFILE */
@@ -25,13 +17,13 @@ export function Profile() {
       />
 
       <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-16">
-        <ScanPanel className="pl-6">
+        <ScanPanel className="glass p-6 sm:p-8">
           <p data-stagger className="text-lg leading-relaxed text-ink sm:text-xl sm:leading-relaxed">
             {summary}
           </p>
         </ScanPanel>
 
-        <ScanPanel className="self-start bg-panel/50 p-6" tone="signal" sweep={false}>
+        <ScanPanel className="self-start glass p-6" tone="signal" sweep={false}>
           <p data-stagger className="chrome mb-5 text-signal">
             Behavioral Read
           </p>
@@ -59,14 +51,14 @@ export function AccessPanel() {
       <ChapterHeader
         id="access-title"
         index="02"
-        label="Access"
+        label="Toolkit"
         title="Unlocked Modules"
         meta={`${skillModules.length} MODULES · ${skillModules.reduce((n, m) => n + m.items.length, 0)} ENTRIES`}
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {skillModules.map((m) => (
-          <ScanPanel key={m.id} className="group bg-panel/40 p-5 transition-colors hover:bg-panel-hi/60">
+          <ScanPanel key={m.id} className="group glass p-5 transition-colors hover:bg-panel-hi/60">
             <div data-stagger className="mb-4 flex items-baseline justify-between border-b border-line pb-3">
               <span className="chrome text-scan">{m.id}</span>
               <span className="chrome tabnum text-dim">
@@ -99,7 +91,7 @@ export function Credentials() {
     <Chapter id="creds">
       <ChapterHeader
         id="creds-title"
-        index="05"
+        index="04"
         label="Credentials"
         title="Verified Records"
         meta="3 RECORDS ON FILE"
@@ -107,7 +99,7 @@ export function Credentials() {
 
       <div className="space-y-4">
         {credentials.map((c) => (
-          <ScanPanel key={c.title} className="bg-panel/40 p-6 sm:p-8">
+          <ScanPanel key={c.title} className="glass p-6 sm:p-8">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <div data-stagger className="mb-3 flex flex-wrap items-center gap-2">
@@ -133,76 +125,18 @@ export function Credentials() {
   );
 }
 
-/* ------------------------------------------------------------------ 06 CONNECT */
+/* ------------------------------------------------------------------- footer */
 
-export function Connect() {
+export function Footer() {
   return (
-    <Chapter id="connect" className="pb-16">
-      <ChapterHeader
-        id="connect-title"
-        index="06"
-        label="Connect"
-        title="Open Channel"
-        meta="ENCRYPTION: YOUR CALL"
-      />
-
-      <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-        <div>
-          <p className="max-w-md text-lg leading-relaxed text-ink">
-            Agent pipelines, retrieval that has to actually retrieve, or a platform
-            that has quietly become three platforms — send it over. Response time
-            beats most CI pipelines.
-          </p>
-          <motion.a
-            href={`mailto:${identity.email}`}
-            whileHover={{ x: 6 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-8 inline-flex items-center gap-3 bg-signal px-6 py-4 font-mono text-sm font-bold uppercase tracking-widest text-void"
-          >
-            Establish connection
-            <span aria-hidden="true">→</span>
-          </motion.a>
-          <p className="chrome mt-6 text-dim">
-            {identity.location} · Open to remote
-          </p>
-        </div>
-
-        <ScanPanel className="bg-panel/40 p-2 sm:p-4">
-          <ul>
-            {endpoints.map((e) => (
-              <li key={e.label} data-stagger>
-                <motion.a
-                  href={e.href}
-                  target={e.proto === "HTTPS" ? "_blank" : undefined}
-                  rel={e.proto === "HTTPS" ? "noreferrer" : undefined}
-                  whileHover={{ backgroundColor: "rgba(28,24,21,0.9)" }}
-                  className="flex items-center gap-4 border-b border-line px-4 py-5 last:border-0"
-                >
-                  <span className="chrome w-14 shrink-0 text-scan">{e.proto}</span>
-                  <span className="min-w-0 flex-1">
-                    <span className="chrome block text-dim">{e.label}</span>
-                    <span className="mt-1 block truncate font-mono text-sm text-ink">{e.value}</span>
-                  </span>
-                  <span aria-hidden="true" className="text-signal">
-                    ↗
-                  </span>
-                </motion.a>
-              </li>
-            ))}
-          </ul>
-        </ScanPanel>
+    <footer className="relative mx-auto mt-16 w-full max-w-6xl px-5 pb-10 sm:px-8">
+      <Stencil className="absolute -top-12 left-4 rotate-1 text-[clamp(1.6rem,5vw,3.4rem)] sm:left-7">
+        STAY DEDSEC
+      </Stencil>
+      <div className="chrome relative flex flex-wrap items-center justify-between gap-3 border-t border-line pt-6 text-dim">
+        <span>© {new Date().getFullYear()} {identity.name}</span>
+        <span>Session closed — no data retained</span>
       </div>
-
-      <footer className="relative mt-24 border-t border-line pt-6">
-        <Stencil className="absolute -top-14 left-0 rotate-1 text-[clamp(1.6rem,5vw,3.4rem)]">
-          STAY DEDSEC
-        </Stencil>
-        <div className="chrome flex flex-wrap items-center justify-between gap-3 text-dim">
-          <span>© {new Date().getFullYear()} {identity.name}</span>
-          <span>Session closed — no data retained</span>
-        </div>
-      </footer>
-    </Chapter>
+    </footer>
   );
 }

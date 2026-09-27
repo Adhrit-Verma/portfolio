@@ -1,9 +1,9 @@
-# DEDSEC DOSSIER — Design System
+# DEDSEC://BROADCAST — Design System
 
-Bespoke system for `adhritverma.dev`. Reference: **Watch_Dogs 2 / ctOS profiler**, not Watch_Dogs 1.
-WD1 is cold, grim, blue-grey Chicago. WD2 is warm, bright, San Francisco hacktivist — DedSec orange
-over warm off-black, spray-stencil and sticker culture layered under clean HUD chrome, glitch used as
-a *transition* (a cut), never as wallpaper.
+Bespoke system for `adhritverma.dev`. Reference: **Watch_Dogs 2**, the San Francisco side of DedSec —
+not WD1's grim blue-grey terminal. The concept: the site is a **pirate broadcast** hijacking your screen,
+the way DedSec hijacks billboards. One real-time 3D world sits behind every page and a camera flies
+through it as you scroll; street-poster type, sticker tape and pixel art sit on top of it.
 
 Source of truth. Do not re-litigate these values elsewhere.
 
@@ -13,100 +13,87 @@ Source of truth. Do not re-litigate these values elsewhere.
 
 | Token | Hex | Role |
 |---|---|---|
-| `void` | `#0E0C0B` | Page ground. Genuinely warm off-black (R>G>B) — never `#000`. |
-| `panel` | `#15120F` | Dossier card / panel fill. |
-| `panel-hi` | `#1C1815` | Raised panel, hover state, table stripe. |
-| `line` | `#2B2724` | Hairline borders, grid texture. |
-| `line-hot` | `#3F3833` | Active/hover hairline. |
-| `ink` | `#EDE9E3` | Body text. Warm off-white — never `#FFF` on dark. |
-| `dim` | `#A39C94` | Secondary text, metadata, timestamps. |
-| `signal` | `#FF6B1A` | **DedSec orange.** Primary accent, CTAs, active state, key numbers. |
-| `signal-soft` | `#FF9552` | Orange for smaller text where the pure hue gets shouty. |
-| `scan` | `#4FE3D6` | ctOS cyan. Secondary "scan/system" accent — brackets, sweep lines, readouts. |
-| `alert` | `#FF2E88` | **Transition only.** RGB-split channel + glitch cut. Never resting UI. |
+| `void` | `#0E0C0B` | Ground. Warm off-black (R>G>B) — never `#000`. |
+| `panel` / `panel-hi` | `#15120F` / `#1C1815` | Panels, raised states. |
+| `line` / `line-hot` | `#2B2724` / `#3F3833` | Hairlines. |
+| `ink` | `#EDE9E3` | Body text. Never `#FFF`. |
+| `dim` | `#A39C94` | Secondary text. |
+| `signal` | `#FF6B1A` | **DedSec orange.** Identity, CTAs, key numbers. |
+| `hot` | `#FF2E88` | Hot magenta. Riso plate, REC light, one poster word per section. |
+| `acid` | `#FFD23F` | Sticker yellow. Kinds/subtitles, the hazard tape. |
+| `scan` | `#4FE3D6` | ctOS cyan. System chrome, the second riso plate. |
 
-**Contrast (measured, on `void`)** — all pass WCAG AA for their use:
-`ink` 16.1:1 · `dim` 7.2:1 · `signal` 6.8:1 · `signal-soft` 9.0:1 · `scan` 12.4:1.
+Contrast on `void`: `ink` 16.1:1 · `dim` 7.2:1 · `signal` 6.8:1 · `scan` 12.4:1 · `acid` 13:1 · `hot` 5.2:1.
+Never use `/opacity` variants of `dim` for text — they drop under 4.5:1.
 
-> The neutrals were originally cool (`#0B0D10` is blue-leaning) while this document
-> claimed they were warm. The whole ramp is now genuinely warm — R > G > B — which is
-> what the Watch_Dogs 2 reference actually looks like and what the copy above always said.
-`alert` is decorative only and never carries meaning alone.
-
-Rules:
-- One accent leads per chapter. Orange = identity/emphasis. Cyan = machine/system chrome.
-- Saturated magenta+cyan split appears only during a `glitchCut`, capped at ~180ms.
-- No pure black, no pure white, no neon-green-on-black. That's the wrong game.
+Rules: a section leads with one pop colour; poster headlines may carry a second in one word. No neon
+green. Colour never carries meaning alone.
 
 ## 2. Typography
 
 | Face | Where | Why |
 |---|---|---|
-| **Chakra Petch** | Display headlines, chapter titles | Beveled, cut-corner terminals read as HUD geometry without cosplaying a "cyber" font. Condensed enough for long section titles on mobile. |
-| **JetBrains Mono** | UI chrome — labels, stats, readouts, nav, timestamps, terminal copy | A real code face. Holds legibility at 11–12px where display faces fall apart, and its tabular figures keep count-up readouts from jittering. |
-| **Inter** | Body copy | Neutral, tall x-height, engineered for screens. Gets out of the way so the two loud faces stay loud. |
+| **Anton** | Poster type — every headline, big numbers | Condensed street-poster weight; reads at 15rem and at 2rem. Also the `--font-display` role. |
+| **JetBrains Mono** | Chrome — labels, readouts, nav, tapes | A real code face, tabular figures for counters. |
+| **Inter** | Body copy | Gets out of the way so the loud faces stay loud. |
 
-All three self-hosted via `next/font/google` — no external request, no layout shift.
+Self-hosted via `next/font/google`. Poster sizes are capped by **both** width and height —
+`clamp(min, min(Nvw, Msvh), max)` — so a wide-but-short window never pushes a headline under the nav.
 
-Scale: chapter titles `clamp(2.5rem, 7vw, 5.5rem)` uppercase, tight tracking.
-Chrome labels `11px/0.18em` uppercase mono. Body `16–18px/1.65` max `68ch`.
+`.riso` prints magenta and cyan plates a hair off-register behind poster type. `.outline-text` for a
+stroked word. Never riso body copy.
 
-## 3. Motion vocabulary
+## 3. The world (`src/components/world/`)
 
-Five named patterns. Everything on the site is one of these — no one-off animations.
+One swarm of **740 shapes** (440 cubes, 150 pyramids, 150 spheres) and one camera, behind every page.
 
-| Name | What it does | Owner |
+- **Formations** (`formations.ts`) are pure data: where each shape goes. Because it's always the same
+  shapes, any formation morphs into any other. Each project's **glyph** is a literal model of what it
+  does — GDC's modules extruded by gray level, TableFox's schema graph with only the retrieved tables lit,
+  Jimmy's ring of remembered moments beamed to the listening pill, a project's **pipe** is its real
+  pipeline, one node cluster per step. Plus the host mask (Wrench-style LED eyes, a hood), the tunnel,
+  the stadium wall, the atom, the helix and a quiet field.
+- **Scenes** (`scenes.ts`) pair a DOM section with a formation and a camera move (from → to across the
+  section). Scroll is the clock: in the last 38% of a viewport of each section, the swarm morphs into the
+  next scene — staggered per shape, arcing outward on a swirl, springing home — while the camera swings
+  with an FOV punch, roll and a chromatic-aberration kick. Phones get their own framing (subject lifted
+  into the top band, camera pulled back).
+- **Persistence**: the world lives in the root layout, so navigating continues the motion — a dossier's
+  last section already shows the *next* project's glyph.
+
+**No glow.** No bloom: flat, lit colour reads crisper under poster type and costs nothing. Post is
+chromatic aberration (cuts only), grain, vignette, Khronos Neutral tone mapping (keeps orange orange).
+
+## 4. Motion vocabulary
+
+| Name | What | Owner |
 |---|---|---|
-| `boot` | Access sequence: mono lines type in, a progress readout ticks 0→100, the panel wipes away into the hero. Runs once per session. | GSAP |
-| `scan` | **The signature move.** Four corner brackets draw in (clip-path), a cyan sweep line crosses the box, a percentage counts up, the label glitches into place, content staggers up. | GSAP + ScrollTrigger |
-| `glitchCut` | Chapter boundary. ~180ms: horizontal slice offset + magenta/cyan channel split, then clean. A cut, not a texture. | CSS keyframes, GSAP-triggered |
-| `typeOn` | Terminal type-on for one key line per chapter. Caret blinks, then resolves. | GSAP |
-| `unlock` | Dossier card reveal: bracket snap, status flips `LOCKED` → `DECRYPTED`, body staggers in. Hover lifts + re-sweeps. | Framer Motion (hover) + GSAP (scroll) |
-| `lock-on` | **The signature interaction.** The cursor is a ctOS targeting reticle: idle it is a crosshair, near anything interactive it snaps to that element's box, tints cyan, and names the action in a readout chip. | Raw rAF, `CtosCursor.tsx` |
-| `corrupt` | The headline is drawn to a canvas from the real `h1`'s computed font, uploaded as a texture, then torn per-channel in GLSL — slice displacement, chromatic aberration, scanlines, dropout. Intensity tracks scroll velocity plus a decaying spike on first resolve. | Custom shader, `ShaderTitle.tsx` |
+| `boot` | Broadcast hijack: static → colour bars → "signal acquired" → CRT collapse onto the site. Once per session. | GSAP |
+| `morph` | The swarm re-forming between scenes, scroll-scrubbed. | `World.tsx` |
+| `kinetic` | Poster type rising letter by letter out of a per-line mask. Above-the-fold type waits for `boot`. | GSAP SplitText (`Kinetic`) |
+| `channel` | Switching featured projects: the panel tears in from a slice, then settles. | CSS `channel-in` |
+| `dither` | The page cut: void blocks dissolve in 4×4 Bayer order on client navigation. | Canvas, `PixelWipe` |
+| `led` | The LED face as a status light: blinks, scans on navigation, hearts the CTA, X X on 404. | `PixelFace` |
+| `meter` | One block per unit — 72 tests are 72 blocks. | `PixelMeter` |
+| `lock-on` | The cursor is a ctOS reticle that snaps to interactive targets and names the action. | Raw rAF, `CtosCursor` |
+| `tape` / `sticker` | Marquee tape and rotating stickers — WD2's sticker-bomb layer. | CSS |
 
-Easing: `--ease-hud` `cubic-bezier(.16,1,.3,1)` for reveals (fast out, long settle — HUD panels arriving).
-`--ease-snap` `cubic-bezier(.6,0,.2,1)` for state flips and cuts.
+**Performance rules** (measured with `scripts/perf.mjs` / `layout-trace.mjs` — keep them true):
+- Animate `transform` / `opacity` only. Never animate `clip-path`, `width`/`height` or filters per frame.
+- No `backdrop-filter` over the canvas — it re-blurs every frame. `.glass` is a solid tint.
+- Rotate HTML wrappers, never SVG elements (SVG transform animations aren't composited).
+- Keep marquee strips short enough to stay a GPU layer; looping CSS animations pause off screen
+  (`AnimationGate`).
+- The swarm's idle motion runs in its vertex shader; the CPU only springs shapes during a morph.
+  Frames are paced 60fps while anything moves, 30fps idle; a governor steps DPR/post down on slow devices.
 
-**Library job split — they never share a timeline:**
-- **GSAP + ScrollTrigger** owns everything scroll-driven: pinning, scrubbed timelines, reveals, counters, the case-log spine.
-- **Framer Motion** owns pointer-driven component state only: hover, tap, layout. No scroll listeners.
-- **React Three Fiber** owns three scenes, all lazy and all gated: the hero particle network, the Files-chapter pipeline topology, and the headline corruption shader.
-- **Raw rAF** owns exactly one thing — the targeting reticle. It never touches React state per frame.
-- **Lenis** smooths the scroll and drives ScrollTrigger's ticker. Off under reduced-motion.
+## 5. Accessibility floor
 
-## 4. Imagery
-
-**The work is the picture.** A portfolio built entirely from type in bordered panels gives a
-reader nothing to look at, however well it is set. Every featured project carries a visual, and
-each is labelled for what it actually is so a screenshot is never mistaken for a diagram:
-
-| Treatment | Used by | What it is |
-|---|---|---|
-| Screenshots | Contrast | Real product captures from the repo — a large lead plus two secondary views. |
-| Schematic | ClauseGuard | Its actual three-agent graph, drawn. No UI exists to capture, and inventing one would be a lie. |
-| Benchmark | TableFox | Its published measurements as bars. Real numbers, caveats printed underneath. |
-
-Colour comes from the work, not from added chrome — Contrast's own coral UI and GDC's colour-coded
-carrier supply it. The page stays neutral so the projects can be the loud thing.
-
-## 5. Texture & iconography
-
-- **Circuit grid**: 1px lines at 3% alpha on a 48px pitch, plus a radial vignette. Background only, never over text.
-- **Scanlines**: 2px repeating overlay at ~4% — only during `boot` and `glitchCut`, never resting.
-- **Stencil marks**: sparse spray-stencil labels (`// DEDSEC`, `ACCESS GRANTED`, chapter index numerals)
-  set in mono, rotated a degree or two, low alpha. WD2's street-art layer, used maybe six times site-wide.
-- **Corner brackets** replace card borders as the primary framing device — a box is *scanned*, not drawn.
-
-## 6. Accessibility floor
-
-The site owner ships an accessibility auditor. Hold the bar.
-
-- **`prefers-reduced-motion`**: a genuinely calmer site, not a broken one. Boot sequence resolves instantly to the hero, `scan` renders in its finished state (brackets drawn, counters at final value), `glitchCut` becomes a plain fade, and Lenis, all three 3D scenes, and the reticle never mount. Nothing is hidden behind an animation that no longer runs.
-- **The reticle never replaces information.** It is `aria-hidden`, intercepts no pointer events, and is not mounted for coarse pointers — touch users keep native behaviour, keyboard users keep the `:focus-visible` ring.
-- **The shader never owns the text.** The real `<h1>` stays in the DOM and only fades once WebGL has actually painted a frame. No JS, no WebGL, or a lost context and you keep crisp, selectable, screen-reader-correct type.
-- Contrast per the table above; never color-alone for meaning (status pills carry text).
-- Glitch never obscures readable content for more than ~180ms, and never runs on a loop over body copy.
-- Every interactive element reachable by keyboard with a visible `scan`-cyan focus ring, `:focus-visible` only.
-- Semantic landmarks, one `h1`, chapters as `<section aria-labelledby>`, decorative layers `aria-hidden`.
-- Content is in the DOM at full opacity before JS animates it down — no-JS gets a readable page.
+- **Reduced motion**: no boot, no Lenis, no reticle, no kinetic type, no dither; the world snaps per scene
+  and renders only on scroll. Everything reads in its finished state.
+- The world, stickers, tapes and meters are decorative and `aria-hidden`; what they say is said in text
+  too (skills as an `sr-only` list beside the tapes, the pipeline as an ordered list of steps, the featured
+  channels as an `sr-only` link list).
+- Text over the world always sits on a scrim or `.glass`; the reading backdrop (`field`) is dark and far.
+- One `h1` per page, sections `aria-labelledby`, `:focus-visible` cyan ring, keyboard-reachable everything.
+- Content is in the DOM at full opacity without JS.

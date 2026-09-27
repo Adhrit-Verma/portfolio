@@ -12,7 +12,8 @@ export function Corners({ tone = "scan" }: { tone?: "scan" | "signal" }) {
   const c = tone === "signal" ? "border-signal" : "border-scan";
   const base = `absolute h-3.5 w-3.5 ${c}`;
   return (
-    <span aria-hidden="true">
+    // Absolute wrapper: out of flow, so it never becomes a grid/flex item of its host.
+    <span aria-hidden="true" className="pointer-events-none absolute inset-0">
       <span data-corner className={`${base} left-0 top-0 border-l border-t`} />
       <span data-corner className={`${base} right-0 top-0 border-r border-t`} />
       <span data-corner className={`${base} bottom-0 left-0 border-b border-l`} />
@@ -72,15 +73,11 @@ export function ChapterHeader({
   return (
     <header className="mb-10 sm:mb-14">
       <div className="flex items-baseline gap-3 border-b border-line pb-3">
-        <span className="chrome text-signal">{index}</span>
+        <span className="chrome text-hot">{index}</span>
         <span className="chrome text-dim">{label}</span>
-        {meta && <span className="chrome ml-auto hidden text-dim/70 sm:block">{meta}</span>}
+        {meta && <span className="chrome ml-auto hidden text-dim sm:block">{meta}</span>}
       </div>
-      <h2
-        id={id}
-        data-stagger
-        className="mt-5 text-[clamp(2.25rem,6.5vw,5rem)] font-bold uppercase leading-[0.92] tracking-tight"
-      >
+      <h2 id={id} data-stagger className="poster riso mt-5 text-[clamp(3rem,9vw,7.5rem)] text-ink">
         {title}
       </h2>
     </header>

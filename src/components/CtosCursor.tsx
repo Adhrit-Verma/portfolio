@@ -31,7 +31,9 @@ function actionFor(el: HTMLElement): string {
   const href = el.getAttribute("href") ?? "";
   if (href.startsWith("mailto:")) return "OPEN CHANNEL";
   if (href.startsWith("tel:")) return "DIAL";
-  if (href.startsWith("#")) return "JUMP";
+  if (href.startsWith("#") || href.includes("/#")) return "JUMP";
+  if (href.startsWith("/work/")) return "DECRYPT FILE";
+  if (href.startsWith("/")) return "ACCESS";
   return "OPEN ↗";
 }
 
@@ -114,11 +116,17 @@ export default function CtosCursor() {
       cur.w = lerp(cur.w, gw, 0.3);
       cur.h = lerp(cur.h, gh, 0.3);
 
-      box.style.transform = `translate3d(${cur.x - cur.w / 2}px, ${cur.y - cur.h / 2}px, 0)`;
-      box.style.width = `${cur.w}px`;
-      box.style.height = `${cur.h}px`;
-      dot.style.transform = `translate3d(${pointer.x}px, ${pointer.y}px, 0)`;
+      // Write only what changed: a width/height write is a layout, and at rest
+      // there's nothing to lay out. (It was costing a full layout every frame.)
+      const tx = `translate3d(${(cur.x - cur.w / 2).toFixed(1)}px, ${(cur.y - cur.h / 2).toFixed(1)}px, 0)`;
+      const w = `${cur.w.toFixed(1)}px`, h = `${cur.h.toFixed(1)}px`;
+      const dx = `translate3d(${pointer.x}px, ${pointer.y}px, 0)`;
+      if (tx !== last.tx) box.style.transform = last.tx = tx;
+      if (w !== last.w) box.style.width = last.w = w;
+      if (h !== last.h) box.style.height = last.h = h;
+      if (dx !== last.dx) dot.style.transform = last.dx = dx;
     };
+    const last = { tx: "", w: "", h: "", dx: "" };
 
     raf = requestAnimationFrame(tick);
     window.addEventListener("pointermove", onMove, { passive: true });
